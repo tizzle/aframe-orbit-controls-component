@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngokevin/aframe-component-boilerplate.git"
+    "url": "git+https://github.com/ngokevin/aframe-example-component.git"
   },
   "keywords": [
     "aframe",
@@ -23,9 +23,9 @@
   "author": "Kevin Ngo <me@ngokevin.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ngokevin/aframe-component-boilerplate/issues"
+    "url": "https://github.com/ngokevin/aframe-example-component/issues"
   },
-  "homepage": "https://github.com/ngokevin/aframe-component-boilerplate#readme",
+  "homepage": "https://github.com/ngokevin/aframe-example-component#readme",
   "devDependencies": {
     "aframe-core": "^0.1.3",
     "browserify-css": "^0.8.3",
