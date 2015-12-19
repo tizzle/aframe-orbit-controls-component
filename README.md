@@ -28,13 +28,25 @@ An example component for [A-Frame](https://aframe.io) VR.
 
 ### Usage
 
+Install.
+
 ```bash
 npm install aframe-example-component
 ```
 
+Register.
+
 ```js
 var exampleComponent = require('aframe-example-component').component;
 require('aframe-core').registerComponent('example', exampleComponent);
+```
+
+Use.
+
+```html
+<a-scene>
+  <a-entity example="exampleProp: exampleVal"></a-entity>
+</a-scene>
 ```
 
 | Property | Description | Default Value |
