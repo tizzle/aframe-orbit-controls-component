@@ -20,10 +20,22 @@ A path to using the boilerplate:
 Example usage of the boilerplate:
 
 - [aframe-layout](https://github.com/ngokevin/aframe-layout)
+- [aframe-text-component](https://github.com/ngokevin/aframe-text-component)
 
 ## aframe-example-component
 
 An example component for [A-Frame](https://aframe.io) VR.
+
+### Usage
+
+```bash
+npm install aframe-example-component
+```
+
+```js
+var exampleComponent = require('aframe-example-component').component;
+require('aframe-core').registerComponent('example', exampleComponent);
+```
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
