@@ -3,6 +3,10 @@
 Boilerplate for creating and sharing [A-Frame](https://aframe.io) VR
 [components](https://aframe.io/docs/core/component.html).
 
+Note this refers to A-Frame components of the [entity-component
+system](https://en.wikipedia.org/wiki/Entity_component_system), and not Web
+Components.
+
 The boilerplate comes with a stub component, test suite, examples
 infrastructure with [Github pages](https://pages.github.com/), and stubbed
 README, which begins below.
