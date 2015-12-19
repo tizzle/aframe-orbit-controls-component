@@ -1,6 +1,6 @@
 {
   "name": "aframe-example-component",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Example component for A-Frame VR.",
   "main": "index.js",
   "scripts": {
