@@ -1,4 +1,5 @@
-node_modules/
+.sw[ponm]
 examples/build.js
 examples/node_modules/
-.sw[ponm]
+gh-pages
+node_modules/

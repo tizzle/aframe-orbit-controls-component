@@ -16,14 +16,15 @@ A path to using the boilerplate:
 - Rename all instances of `example` and `Example` to your component name.
 - Write your component.
 - Write your unit tests.
-- Write examples.
-- Remove the boilerplate instructions of this README and everything at the bottom.
-- Publish to NPM.
+- Build examples.
+- Clean up this README.
+- Publish to NPM (`npm publish`).
+- Publish examples to Github pages (`npm run ghpages`).
 - Share your component on [Slack](http://aframevr.slack.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
 
 Example usage of the boilerplate:
 
-- [aframe-layout](https://github.com/ngokevin/aframe-layout)
+- [aframe-layout-component](https://github.com/ngokevin/aframe-layout-component)
 - [aframe-text-component](https://github.com/ngokevin/aframe-text-component)
 
 ## aframe-example-component
