@@ -16,7 +16,7 @@ A path to using the boilerplate:
 - Rename all instances of `example` and `Example` to your component name.
 - Write your component.
 - Write your unit tests.
-- Build examples.
+- Build examples (`npm run dev` to watch for changes to build example bundles).
 - Clean up this README.
 - Check `browser.js` and see if components are required and registered correctly.
 - Publish to NPM (`npm publish`). This will also generate a browser distribution to commit.
