@@ -6,6 +6,8 @@
   "scripts": {
     "build": "browserify examples/main.js -o examples/build.js",
     "dev": "watchify examples/main.js -o examples/build.js",
+    "dist": "webpack browser.js dist/aframe-example-component.js && webpack -p browser.js dist/aframe-example-component.min.js",
+    "postpublish": "npm run dist",
     "preghpages": "npm run build && rm -rf gh-pages && cp -r examples gh-pages",
     "ghpages": "npm run preghpages && ghpages -p gh-pages",
     "gh-pages": "npm run ghpages",
@@ -46,6 +48,7 @@
     "karma-mocha-reporter": "^1.1.3",
     "karma-sinon-chai": "^1.1.0",
     "mocha": "^2.3.4",
-    "watchify": "^3.6.1"
+    "watchify": "^3.6.1",
+    "webpack": "^1.12.9"
   }
 }

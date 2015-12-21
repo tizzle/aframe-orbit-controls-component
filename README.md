@@ -18,7 +18,8 @@ A path to using the boilerplate:
 - Write your unit tests.
 - Build examples.
 - Clean up this README.
-- Publish to NPM (`npm publish`).
+- Check `browser.js` and see if components are required and registered correctly.
+- Publish to NPM (`npm publish`). This will also generate a browser distribution to commit.
 - Publish examples to Github pages (`npm run ghpages`).
 - Share your component on [Slack](http://aframevr.slack.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
 
