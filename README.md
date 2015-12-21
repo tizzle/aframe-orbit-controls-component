@@ -27,6 +27,7 @@ Example usage of the boilerplate:
 
 - [aframe-layout-component](https://github.com/ngokevin/aframe-layout-component)
 - [aframe-text-component](https://github.com/ngokevin/aframe-text-component)
+- [aframe-extrude-and-lathe](https://github.com/JosePedroDias/aframe-extrude-and-lathe)
 
 ## aframe-example-component
 
