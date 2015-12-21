@@ -34,7 +34,7 @@ An example component for [A-Frame](https://aframe.io) VR.
 
 ### Usage
 
-Install (or directly include the [browser files](tree/master/dist)).
+Install (or directly include the [browser files](dist)).
 
 ```bash
 npm install aframe-example-component
