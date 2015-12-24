@@ -1,6 +1,6 @@
 {
   "name": "aframe-example-component",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Example component for A-Frame VR.",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/ngokevin/aframe-component-boilerplate#readme",
   "devDependencies": {
-    "aframe-core": "*",
+    "aframe-core": "^0.1.0",
     "browserify": "^12.0.1",
     "browserify-css": "^0.8.3",
     "chai": "^3.4.1",
