@@ -1,6 +1,6 @@
 // Browser distrubution of the A-Frame component.
 (function () {
-  if (!AFRAME) {
+  if (typeof AFRAME === 'undefined') {
     console.error('Component attempted to register before AFRAME was available.');
     return;
   }
