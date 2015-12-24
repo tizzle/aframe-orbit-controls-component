@@ -18,7 +18,8 @@ A path to using the boilerplate:
 - Write your unit tests.
 - Build examples (`npm run dev` to watch for changes to build example bundles).
 - Clean up this README.
-- Check `browser.js` and see if components are required and registered correctly.
+- Check `browser.js` and see if components are required and registered correctly. `browser.js`
+- is used to generate `dist` files.
 - Publish to NPM (`npm publish`). This will also generate a browser distribution to commit.
 - Publish examples to Github pages (`npm run ghpages`).
 - Share your component on [Slack](http://aframevr.slack.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
