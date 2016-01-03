@@ -1,4 +1,4 @@
-// Browser distrubution of the A-Frame component.
+// Browser distribution of the A-Frame component.
 (function () {
   if (typeof AFRAME === 'undefined') {
     console.error('Component attempted to register before AFRAME was available.');
