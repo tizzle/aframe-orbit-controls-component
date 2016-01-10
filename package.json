@@ -4,12 +4,12 @@
   "description": "Example component for A-Frame VR.",
   "main": "index.js",
   "scripts": {
-    "dev": "budo examples/main.js --dir examples --port 8000 --live --open",
+    "build": "browserify examples/main.js -o examples/build.js",
+    "dev": "budo examples/main.js -s examples/build.js --dir examples --port 8000 --live --open",
     "dist": "webpack browser.js dist/aframe-example-component.js && webpack -p browser.js dist/aframe-example-component.min.js",
     "postpublish": "npm run dist",
     "preghpages": "npm run build && rm -rf gh-pages && cp -r examples gh-pages",
     "ghpages": "npm run preghpages && ghpages -p gh-pages",
-    "gh-pages": "npm run ghpages",
     "test": "karma start ./tests/karma.conf.js"
   },
   "repository": {
