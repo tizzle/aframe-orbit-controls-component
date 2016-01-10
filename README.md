@@ -36,25 +36,37 @@ An example component for [A-Frame](https://aframe.io) VR.
 
 ### Usage
 
-Install (or directly include the [browser files](dist)).
+#### Browser Installation
+
+Install and use by directly including the [browser files](dist):
+
+```html
+<head>
+  <title>My A-Frame Scene</title>
+  <script src="https://aframe.io/releases/latest/aframe.min.js"></script>
+  <script src="https://github.com/ngokevin/aframe-component-boilerplate/blob/master/dist/aframe-example-component.min.js"></script>
+</head>
+
+<body>
+  <a-scene>
+    <a-entity example="exampleProp: exampleVal"></a-entity>
+  </a-scene>
+</body>
+```
+
+#### NPM Installation
+
+Install via NPM:
 
 ```bash
 npm install aframe-example-component
 ```
 
-Register.
+Then register and use.
 
 ```js
 var exampleComponent = require('aframe-example-component').component;
 require('aframe-core').registerComponent('example', exampleComponent);
-```
-
-Use.
-
-```html
-<a-scene>
-  <a-entity example="exampleProp: exampleVal"></a-entity>
-</a-scene>
 ```
 
 | Property | Description | Default Value |
