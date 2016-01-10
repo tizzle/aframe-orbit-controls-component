@@ -65,8 +65,9 @@ npm install aframe-example-component
 Then register and use.
 
 ```js
+var AFRAME = require('aframe-core');
 var exampleComponent = require('aframe-example-component').component;
-require('aframe-core').registerComponent('example', exampleComponent);
+AFRAME.registerComponent('example', exampleComponent);
 ```
 
 | Property | Description | Default Value |
