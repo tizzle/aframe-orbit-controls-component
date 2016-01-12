@@ -15,11 +15,10 @@ A path to using the boilerplate:
 
 - Rename all instances of `example` and `Example` to your component name.
 - Write your component.
-- Write your unit tests.
 - Build examples (`npm run dev` to watch for changes to build example bundles).
 - Clean up this README.
 - Check `browser.js` and see if components are required and registered correctly. `browser.js`
-- is used to generate `dist` files.
+is used to generate `dist` files.
 - Publish to NPM (`npm publish`). This will also generate a browser distribution to commit.
 - Publish examples to Github pages (`npm run ghpages`).
 - Share your component on [Slack](http://aframevr.slack.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
@@ -29,6 +28,8 @@ Example usage of the boilerplate:
 - [aframe-layout-component](https://github.com/ngokevin/aframe-layout-component)
 - [aframe-text-component](https://github.com/ngokevin/aframe-text-component)
 - [aframe-extrude-and-lathe](https://github.com/JosePedroDias/aframe-extrude-and-lathe)
+- [aframe-obj-loader-component](https://github.com/donmccurdy/aframe-obj-loader-component)
+- [aframe-physics-component](https://github.com/ngokevin/aframe-physics-component)
 
 ## aframe-example-component
 
