@@ -1,11 +1,15 @@
 <html>
   <head>
     <script src="../build.js"></script>
+    <script src="https://raw.githubusercontent.com/ngokevin/aframe-text-component/master/dist/aframe-text-component.js"></script>
+    <script src="https://raw.githubusercontent.com/ngokevin/aframe-layout-component/master/dist/aframe-layout-component.js"></script>
   </head>
   <body>
     <a-assets></a-assets>
     <a-scene>
-      <a-entity geometry="primitive: box" material="color: #C03546"></a-entity>
+      <a-entity keyboard="abcdefghijklmnopqrstuvwxyz" layout="type: box; columns: 26">
+      </a-entity>
+      <a-entity keyboard-output="[keyboard]"></a-entity>
     </a-scene>
   </body>
 </html>

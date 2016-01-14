@@ -1,12 +1,12 @@
 {
-  "name": "aframe-example-component",
+  "name": "aframe-keyboard-components",
   "version": "1.0.0",
-  "description": "Example component for A-Frame VR.",
+  "description": "Keyboard components for A-Frame VR.",
   "main": "index.js",
   "scripts": {
     "build": "browserify examples/main.js -o examples/build.js",
     "dev": "budo examples/main.js:build.js --dir examples --port 8000 --live --open",
-    "dist": "webpack browser.js dist/aframe-example-component.js && webpack -p browser.js dist/aframe-example-component.min.js",
+    "dist": "webpack browser.js dist/aframe-keyboard-components.js && webpack -p browser.js dist/aframe-keyboard-components.min.js",
     "postpublish": "npm run dist",
     "preghpages": "npm run build && rm -rf gh-pages && cp -r examples gh-pages",
     "ghpages": "npm run preghpages && ghpages -p gh-pages",
@@ -14,26 +14,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngokevin/aframe-component-boilerplate.git"
+    "url": "git+https://github.com/ngokevin/aframe-keyboard-components.git"
   },
   "keywords": [
     "aframe",
     "aframe-component",
-    "layout",
+    "aframe-keyboard-component",
+    "aframe-keyboard-components",
+    "aframe-keyboard",
+    "aframe-input",
     "aframe-vr",
     "vr",
-    "aframe-layout",
     "mozvr",
     "webvr"
   ],
   "author": "Kevin Ngo <me@ngokevin.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ngokevin/aframe-component-boilerplate/issues"
+    "url": "https://github.com/ngokevin/aframe-keyboard-components/issues"
   },
-  "homepage": "https://github.com/ngokevin/aframe-component-boilerplate#readme",
+  "homepage": "https://github.com/ngokevin/aframe-keyboard-components#readme",
   "devDependencies": {
-    "aframe-core": "^0.1.0",
+    "aframe": "aframevr/aframe#dev",
     "browserify": "^12.0.1",
     "browserify-css": "^0.8.3",
     "budo": "^7.1.0",

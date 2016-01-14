@@ -1,23 +1,58 @@
-/**
- * Example component for A-Frame.
- */
-module.exports.component = {
-  schema: { },
+var keyboardComponent = {
+  schema: {
+    default: 'abcdefghijklmnopqrstuvwxyz'
+  },
 
-  /**
-   * Called once when component is attached. Generally for initial setup.
-   */
-  init: function () { },
+  update: function () {
+    var characters = this.data.split('');
+    var keyboard = this.el;
+    var self = this;
+    var selectedLetterIndex = 0;
 
-  /**
-   * Called when component is attached and when component data changes.
-   * Generally modifies the entity based on the data.
-   */
-  update: function (oldData) { },
+    // Create letters that, when clicked, trigger a `keydown` event on the keyboard.
+    characters.forEach(function (character) {
+      // Keyboard characters absorb text properties of the keyboard.
+      var textProperties = keyboard.getAttribute('text') || {};
+      textProperties.text = character;
 
-  /**
-   * Called when a component is removed (e.g., via removeAttribute).
-   * Generally undoes all modifications to the entity.
-   */
-  remove: function () { }
+      var entity = document.createElement('a-entity');
+      entity.setAttribute('text', textProperties);
+      entity.addEventListener('click', function () {
+        keyboard.emit('keydown', {
+          character: character
+        });
+      });
+      keyboard.appendChild(entity);
+    });
+  }
+};
+
+var keyboardOutputComponent = {
+  schema: {
+    type: 'selector'
+  },
+
+  update: function () {
+    var keyboard = this.data;
+    var keyboardOutput = this.el;
+
+    // When keyboard enters a key, output the character as a child.
+    keyboard.addEventListener('keydown', function (event) {
+      // Outputted character absorbs text properties of the keyboard output wrapper or
+      // the keyboard.
+      var textProperties = keyboardOutput.getAttribute('text') ||
+                           keyboard.getAttribute('text');
+      textProperties.text = event.character;
+
+      var entity = document.createElement('a-entity');
+      entity.setAttribute('text', textProperties);
+
+      keyboardOutput.appendChild(entity);
+    });
+  }
+};
+
+module.exports.components = {
+  'keyboard': keyboardComponent,
+  'keyboard-output': keyboardOutputComponent
 };
