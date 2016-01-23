@@ -3,15 +3,11 @@
 Boilerplate for creating and sharing [A-Frame](https://aframe.io) VR
 [components](https://aframe.io/docs/core/component.html).
 
-Note this refers to A-Frame components of the [entity-component
-system](https://en.wikipedia.org/wiki/Entity_component_system), and not Web
-Components.
-
 The boilerplate comes with a stub component, test suite, examples
 infrastructure with [Github pages](https://pages.github.com/), and stubbed
-README, which begins below.
+README. It frequently keeps up-to-date with the A-Frame API as things change.
 
-A path to using the boilerplate:
+General usage of the boilerplate:
 
 - Rename all instances of `example` and `Example` to your component name.
 - Write your component.
@@ -30,6 +26,11 @@ Example usage of the boilerplate:
 - [aframe-extrude-and-lathe](https://github.com/JosePedroDias/aframe-extrude-and-lathe)
 - [aframe-obj-loader-component](https://github.com/donmccurdy/aframe-obj-loader-component)
 - [aframe-physics-component](https://github.com/ngokevin/aframe-physics-component)
+
+How to write a component:
+
+- [Tutorial (WIP)](https://github.com/ngokevin/ngokevin/blob/master/content/blog/092-aframe_component.mkd)
+- [Documentation](https://aframe.io/docs/core/component.html#Building_a_Component)
 
 ## aframe-example-component
 
