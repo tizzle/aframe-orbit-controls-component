@@ -6,6 +6,10 @@ Boilerplate for creating and sharing [A-Frame](https://aframe.io) VR
 The boilerplate comes with a stub component, test suite, examples
 infrastructure with [Github pages](https://pages.github.com/), and stubbed
 README. It frequently keeps up-to-date with the A-Frame API as things change.
+Check out the [dev
+branch](https://github.com/ngokevin/aframe-component-boilerplate/tree/dev) to
+see the boilerplate following A-Frame's [dev
+branch](https://github.com/aframevr/aframe/tree/dev).
 
 General usage of the boilerplate:
 
