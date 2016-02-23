@@ -40,6 +40,12 @@ How to write a component:
 
 An example component for [A-Frame](https://aframe.io) VR.
 
+### Properties
+
+| Property | Description | Default Value |
+| -------- | ----------- | ------------- |
+|          |             |               |
+
 ### Usage
 
 #### Browser Installation
@@ -75,7 +81,3 @@ var AFRAME = require('aframe-core');
 var exampleComponent = require('aframe-example-component').component;
 AFRAME.registerComponent('example', exampleComponent);
 ```
-
-| Property | Description | Default Value |
-| -------- | ----------- | ------------- |
-|          |             |               |
