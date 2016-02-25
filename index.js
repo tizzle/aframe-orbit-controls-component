@@ -1,7 +1,11 @@
+if (typeof AFRAME === 'undefined') {
+  throw 'Component attempted to register before AFRAME was available.';
+}
+
 /**
  * Example component for A-Frame.
  */
-module.exports.component = {
+AFRAME.registerComponent('example', {
   schema: { },
 
   /**
@@ -19,5 +23,22 @@ module.exports.component = {
    * Called when a component is removed (e.g., via removeAttribute).
    * Generally undoes all modifications to the entity.
    */
-  remove: function () { }
-};
+  remove: function () { },
+
+  /**
+   * Called on each scene tick.
+   */
+  // tick: function (t) { },
+
+  /**
+   * Called when entity pauses.
+   * Use to stop or remove any dynamic or background behavior such as events.
+   */
+  pause: function () { },
+
+  /**
+   * Called when entity resumes.
+   * Use to continue or add any dynamic or background behavior such as events.
+   */
+  play: function () { },
+});
