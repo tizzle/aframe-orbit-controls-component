@@ -9,7 +9,7 @@ Boilerplate for sharing [A-Frame](https://aframe.io) VR [components](https://afr
 
 Steps:
 
-1. `npm install && npm run name` to rename the placeholders to your component name.
+1. `npm install && npm run unboil` to rename the placeholders to your component name.
 2. Write your component.
 3. Build examples (`npm run dev` to watch for changes to build example bundles).
 4. Clean up this README.

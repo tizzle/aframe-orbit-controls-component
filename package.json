@@ -9,9 +9,9 @@
     "dist": "webpack index.js dist/aframe-example-component.js && webpack -p index.js dist/aframe-example-component.min.js",
     "postpublish": "npm run dist",
     "preghpages": "npm run build && rm -rf gh-pages && cp -r examples gh-pages",
-    "name": "node scripts/name.js",
     "ghpages": "npm run preghpages && ghpages -p gh-pages",
-    "test": "karma start ./tests/karma.conf.js"
+    "test": "karma start ./tests/karma.conf.js",
+    "unboil": "node scripts/unboil.js"
   },
   "repository": {
     "type": "git",
