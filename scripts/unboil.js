@@ -26,13 +26,14 @@ var q4 = {
 };
 
 ls('README.md').forEach(function (file) {
-  sed('-i', '1,/## aframe-example-component/d', file);
+  sed('-i', '1,/aframe-example-component/d', file);
 });
 
-inquirer.prompt([q1, q2], function (ans) {
-  ls('index.js package.json README.md').forEach(function(file) {
+inquirer.prompt([q1, q2, q3, q4], function (ans) {
+  ls(['index.js', 'package.json', 'README.md']).forEach(function(file) {
     sed('-i', 'aframe-example-component', 'aframe-' + ans.shortname + '-component', file);
     sed('-i', 'Example Component', ans.longname + ' Component', file);
+    sed('-i', 'Example component', ans.longname + ' component', file);
     sed('-i', "'example'", "'" + ans.shortname + "'", file);
   });
 
@@ -45,7 +46,8 @@ inquirer.prompt([q1, q2], function (ans) {
     sed('-i', 'Example Component', ans.longname + ' Component', file);
   });
 
-  ls('package.json README.md').forEach(function (file) {
+  ls(['package.json', 'README.md']).forEach(function (file) {
+    sed('-i', 'aframe-example-component', 'aframe-' + ans.shortname + '-component', file);
     sed('-i', 'ngokevin/aframe-component-boilerplate', ans.repo, file);
     sed('-i', 'Kevin Ngo <me@ngokevin.com>', ans.author, file);
   });
