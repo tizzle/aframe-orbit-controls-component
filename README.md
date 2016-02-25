@@ -31,6 +31,7 @@ Resources:
 - [Tutorial](https://github.com/ngokevin/ngokevin/blob/master/content/blog/092-aframe_component.mkd)
 - [Documentation](https://aframe.io/docs/core/component.html#Building_a_Component)
 
+--trim--
 ## aframe-example-component
 
 An example component for [A-Frame](https://aframe.io) VR.

@@ -1,5 +1,6 @@
 require('shelljs/global');
 var inquirer = require('inquirer');
+var spawn = require('child_process').spawn;
 
 var q1 = {
   name: 'shortname',
@@ -24,10 +25,6 @@ var q4 = {
   message: 'Who are you? (e.g., Jane John <jj@example.com>)',
   type: 'input'
 };
-
-ls('README.md').forEach(function (file) {
-  sed('-i', '1,/aframe-example-component/d', file);
-});
 
 inquirer.prompt([q1, q2, q3, q4], function (ans) {
   ls(['index.js', 'package.json', 'README.md']).forEach(function(file) {
