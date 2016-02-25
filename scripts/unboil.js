@@ -25,6 +25,10 @@ var q4 = {
   type: 'input'
 };
 
+ls('README.md').forEach(function (file) {
+  sed('-i', '1,/## aframe-example-component/d', file);
+});
+
 inquirer.prompt([q1, q2], function (ans) {
   ls('index.js package.json README.md').forEach(function(file) {
     sed('-i', 'aframe-example-component', 'aframe-' + ans.shortname + '-component', file);
@@ -32,7 +36,7 @@ inquirer.prompt([q1, q2], function (ans) {
     sed('-i', "'example'", "'" + ans.shortname + "'", file);
   });
 
-  ls('README.md').forEach(function(file) {
+  ls('README.md').forEach(function (file) {
     sed('-i', 'example component', ans.longname + ' component', file);
     sed('-i', 'example=', ans.shortname + '=', file);
   });
