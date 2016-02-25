@@ -51,7 +51,7 @@ Install and use by directly including the [browser files](dist):
 <head>
   <title>My A-Frame Scene</title>
   <script src="https://aframe.io/releases/latest/aframe.min.js"></script>
-  <script src="https://github.com/ngokevin/aframe-component-boilerplate/blob/master/dist/aframe-example-component.min.js"></script>
+  <script src="https://raw.githubusercontent.com/ngokevin/aframe-component-boilerplate/master/dist/aframe-example-component.min.js"></script>
 </head>
 
 <body>

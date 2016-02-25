@@ -29,19 +29,20 @@ inquirer.prompt([q1, q2], function (ans) {
   ls('index.js package.json README.md').forEach(function(file) {
     sed('-i', 'aframe-example-component', 'aframe-' + ans.shortname + '-component', file);
     sed('-i', 'Example Component', ans.longname + ' Component', file);
-    sed('-i', 'example component', ans.longname + ' component', file);
     sed('-i', "'example'", "'" + ans.shortname + "'", file);
+  });
+
+  ls('README.md').forEach(function(file) {
+    sed('-i', 'example component', ans.longname + ' component', file);
+    sed('-i', 'example=', ans.shortname + '=', file);
   });
 
   find('examples').filter(function (file) { return file.match(/\.html/); }).forEach(function (file) {
     sed('-i', 'Example Component', ans.longname + ' Component', file);
   });
 
-  ls('package.json').forEach(function (file) {
+  ls('package.json README.md').forEach(function (file) {
     sed('-i', 'ngokevin/aframe-component-boilerplate', ans.repo, file);
-  });
-
-  ls('package.json').forEach(function (file) {
     sed('-i', 'Kevin Ngo <me@ngokevin.com>', ans.author, file);
   });
 });
