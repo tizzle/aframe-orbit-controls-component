@@ -9,13 +9,12 @@ Boilerplate for sharing [A-Frame](https://aframe.io) VR [components](https://afr
 
 Steps:
 
-1. `npm install && npm run unboil` to rename the placeholders to your component name.
-2. Write your component.
+1. `npm install && npm run unboil` to rename and trim stuff.
+2. [Write your component](http://ngokevin.com/blog/aframe-component).
 3. Build examples (`npm run dev` to watch for changes to build example bundles).
-4. Clean up this README.
-5. `npm publish` and commit the `dist/` files.
-6. `npm run ghpages`.
-7. Share your component on [Slack](http://aframevr.slack.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
+4. `npm publish` and commit the `dist/` files.
+5. `npm run ghpages` to share with people.
+6. Share on [Slack](https://aframevr-slack.herokuapp.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
 
 Example usage:
 
@@ -25,11 +24,6 @@ Example usage:
 - [aframe-obj-loader-component](https://github.com/donmccurdy/aframe-obj-loader-component)
 - [aframe-physics-component](https://github.com/ngokevin/aframe-physics-component)
 - [aframe-template-component](https://github.com/ngokevin/aframe-template-component)
-
-Resources:
-
-- [Tutorial](https://github.com/ngokevin/ngokevin/blob/master/content/blog/092-aframe_component.mkd)
-- [Documentation](https://aframe.io/docs/core/component.html#Building_a_Component)
 
 --trim--
 ## aframe-example-component

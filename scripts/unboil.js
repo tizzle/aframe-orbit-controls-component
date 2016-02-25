@@ -1,6 +1,6 @@
 require('shelljs/global');
+var exec = require('child_process').exec;
 var inquirer = require('inquirer');
-var spawn = require('child_process').spawn;
 
 var q1 = {
   name: 'shortname',
@@ -49,3 +49,5 @@ inquirer.prompt([q1, q2, q3, q4], function (ans) {
     sed('-i', 'Kevin Ngo <me@ngokevin.com>', ans.author, file);
   });
 });
+
+exec("sed '1,/--trim--/d' README.md | tee README.md");
