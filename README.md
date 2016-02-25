@@ -5,20 +5,19 @@ Boilerplate for sharing [A-Frame](https://aframe.io) VR [components](https://afr
 - Stubbed component
 - Stubbed README
 - Examples
-- Test suite
 - [Github pages](https://pages.github.com/)
 
 Steps:
 
-1. Rename all instances of `example` and `Example` to your component name.
+1. `npm install && npm run name` to rename the placeholders to your component name.
 2. Write your component.
 3. Build examples (`npm run dev` to watch for changes to build example bundles).
 4. Clean up this README.
-5. Publish to NPM (`npm publish`). This will also generate a browser distribution to commit.
-6. Publish examples to Github pages (`npm run ghpages`).
+5. `npm publish` and commit the `dist/` files.
+6. `npm run ghpages`.
 7. Share your component on [Slack](http://aframevr.slack.com/) and [awesome-aframe](https://github.com/aframevr/awesome-aframe)!
 
-Example usage of the boilerplate:
+Example usage:
 
 - [aframe-layout-component](https://github.com/ngokevin/aframe-layout-component)
 - [aframe-text-component](https://github.com/ngokevin/aframe-text-component)
