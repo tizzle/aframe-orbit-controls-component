@@ -1,5 +1,7 @@
 ## aframe-component-boilerplate
 
+> This is not at all means required for writing an A-Frame component. It is intended for publishing and sharing a component for the community to re-use.
+
 Boilerplate for sharing [A-Frame](https://aframe.io) VR [components](https://aframe.io/docs/core/component.html):
 
 1. `npm install && npm run unboil` to rename and trim stuff.
