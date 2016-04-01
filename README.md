@@ -2,8 +2,6 @@
 
 > This is not at all means required for writing an A-Frame component. It is intended for publishing and sharing a component for the community to re-use.
 
-> Check out the [v0.1.0 tag](https://github.com/ngokevin/aframe-component-boilerplate/tree/v0.1.0) to support older A-Frame versions.
-
 Boilerplate for sharing [A-Frame](https://aframe.io) VR [components](https://aframe.io/docs/core/component.html):
 
 1. `npm install && npm run unboil` to rename and trim stuff.
@@ -42,7 +40,7 @@ Install and use by directly including the [browser files](dist):
 ```html
 <head>
   <title>My A-Frame Scene</title>
-  <script src="https://aframe.io/releases/latest/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
   <script src="https://rawgit.com/ngokevin/aframe-component-boilerplate/master/dist/aframe-example-component.min.js"></script>
 </head>
 
