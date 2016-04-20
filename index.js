@@ -1,5 +1,5 @@
 if (typeof AFRAME === 'undefined') {
-  throw 'Component attempted to register before AFRAME was available.';
+  throw new Error('Component attempted to register before AFRAME was available.');
 }
 
 /**
