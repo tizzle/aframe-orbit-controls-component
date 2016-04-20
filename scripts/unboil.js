@@ -41,6 +41,7 @@ inquirer.prompt([q1, q2, q3, q4], function (ans) {
 
   find('examples').filter(function (file) { return file.match(/\.html/); }).forEach(function (file) {
     sed('-i', 'Example Component', ans.longname + ' Component', file);
+    sed('-i', 'ngokevin/aframe-component-boilerplate', ans.repo, file);
   });
 
   ls(['package.json', 'README.md']).forEach(function (file) {
