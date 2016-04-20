@@ -1,7 +1,7 @@
 {
   "name": "aframe-example-component",
   "version": "0.1.0",
-  "description": "Example component for A-Frame VR.",
+  "description": "Example component for A-Frame.",
   "main": "index.js",
   "scripts": {
     "build": "browserify examples/main.js -o examples/build.js",
