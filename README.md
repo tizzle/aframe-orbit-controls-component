@@ -23,7 +23,7 @@ Examples:
 --trim--
 ## aframe-example-component
 
-An example component for [A-Frame](https://aframe.io).
+A example component for [A-Frame](https://aframe.io).
 
 ### Properties
 
