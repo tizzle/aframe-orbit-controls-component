@@ -4,7 +4,7 @@
 
 Boilerplate for sharing [A-Frame](https://aframe.io) [components](https://aframe.io/docs/core/component.html):
 
-1. `npm install && npm run unboil` to rename and trim stuff.
+1. `npm install && **npm run unboil**` to rename and trim stuff.
 2. [Write your component](http://ngokevin.com/blog/aframe-component).
 3. Build examples (`npm run dev` to watch for changes to build example bundles).
 4. `npm publish` and commit the `dist/` files.
