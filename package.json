@@ -8,7 +8,7 @@
     "dev": "budo examples/main.js:build.js --dir examples --port 8000 --live --open",
     "dist": "webpack index.js dist/aframe-example-component.js && webpack -p index.js dist/aframe-example-component.min.js",
     "postpublish": "npm run dist",
-    "preghpages": "npm run build && rm -rf gh-pages && cp -r examples gh-pages",
+    "preghpages": "npm run build && shx rm -rf gh-pages && shx cp -r examples gh-pages",
     "ghpages": "npm run preghpages && ghpages -p gh-pages",
     "unboil": "node scripts/unboil.js"
   },
@@ -32,12 +32,13 @@
   "homepage": "https://github.com/ngokevin/aframe-component-boilerplate#readme",
   "devDependencies": {
     "aframe": "^0.2.0",
-    "browserify": "^12.0.1",
-    "browserify-css": "^0.8.3",
-    "budo": "^7.1.0",
-    "ghpages": "0.0.3",
-    "inquirer": "^0.12.0",
-    "shelljs": "^0.6.0",
-    "webpack": "^1.12.9"
+    "browserify": "^13.0.0",
+    "browserify-css": "^0.9.1",
+    "budo": "^8.2.2",
+    "ghpages": "^0.0.8",
+    "inquirer": "^1.0.2",
+    "shelljs": "^0.7.0",
+    "shx": "^0.1.1",
+    "webpack": "^1.13.0"
   }
 }
