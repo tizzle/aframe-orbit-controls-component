@@ -8,7 +8,7 @@
     "dev": "budo examples/main.js:build.js --dir examples --port 8000 --live --open",
     "dist": "webpack index.js dist/aframe-example-component.js && webpack -p index.js dist/aframe-example-component.min.js",
     "postpublish": "npm run dist",
-    "preghpages": "npm run build && shx rm -rf gh-pages && shx cp -r examples gh-pages",
+    "preghpages": "npm run build && shx rm -rf gh-pages && shx mkdir gh-pages && shx cp -r examples/* gh-pages",
     "ghpages": "npm run preghpages && ghpages -p gh-pages",
     "unboil": "node scripts/unboil.js"
   },
