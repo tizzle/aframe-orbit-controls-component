@@ -1,3 +1,5 @@
+/* global AFRAME */
+
 if (typeof AFRAME === 'undefined') {
   throw new Error('Component attempted to register before AFRAME was available.');
 }
@@ -7,6 +9,11 @@ if (typeof AFRAME === 'undefined') {
  */
 AFRAME.registerComponent('example', {
   schema: { },
+
+  /**
+   * Set if component needs multiple instancing.
+   */
+  multiple: false,
 
   /**
    * Called once when component is attached. Generally for initial setup.
@@ -40,5 +47,5 @@ AFRAME.registerComponent('example', {
    * Called when entity resumes.
    * Use to continue or add any dynamic or background behavior such as events.
    */
-  play: function () { },
+  play: function () { }
 });

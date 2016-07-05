@@ -1,3 +1,4 @@
+/* global find, ls, sed */
 require('shelljs/global');
 var exec = require('child_process').exec;
 var inquirer = require('inquirer');
@@ -51,7 +52,7 @@ var q4 = {
 inquirer.prompt([q1, q2, q3, q4], run);
 
 function run (ans) {
-  ls(['index.js', 'package.json', 'README.md']).forEach(function(file) {
+  ls(['index.js', 'package.json', 'README.md']).forEach(function (file) {
     sed('-i', 'aframe-example-component', 'aframe-' + ans.shortname + '-component', file);
     sed('-i', 'Example Component', ans.longname + ' Component', file);
     sed('-i', 'Example component', ans.longname + ' component', file);
