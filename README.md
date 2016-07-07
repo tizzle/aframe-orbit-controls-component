@@ -25,15 +25,15 @@ Examples:
 
 A example component for [A-Frame](https://aframe.io).
 
-### Properties
+### API
 
 | Property | Description | Default Value |
 | -------- | ----------- | ------------- |
 |          |             |               |
 
-### Usage
+### Installation
 
-#### Browser Installation
+#### Browser
 
 Install and use by directly including the [browser files](dist):
 
@@ -51,9 +51,9 @@ Install and use by directly including the [browser files](dist):
 </body>
 ```
 
-#### NPM Installation
+#### npm
 
-Install via NPM:
+Install via npm:
 
 ```bash
 npm install aframe-example-component
