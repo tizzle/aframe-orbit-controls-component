@@ -1,12 +1,12 @@
 {
-  "name": "aframe-example-component",
+  "name": "aframe-orbit-controls-component",
   "version": "0.1.0",
-  "description": "Example component for A-Frame.",
+  "description": "A (almost) direct port of the ThreeJS OrbitControls as a component for A-Frame.",
   "main": "index.js",
   "scripts": {
     "build": "browserify examples/main.js -o examples/build.js",
     "dev": "budo examples/main.js:build.js --dir examples --port 8000 --live --open",
-    "dist": "webpack index.js dist/aframe-example-component.js && webpack -p index.js dist/aframe-example-component.min.js",
+    "dist": "webpack index.js dist/aframe-orbit-controls-component.js && webpack -p index.js dist/aframe-orbit-controls-component.min.js",
     "lint": "semistandard -v | snazzy",
     "postpublish": "npm run dist",
     "preghpages": "npm run build && shx rm -rf gh-pages && shx mkdir gh-pages && shx cp -r examples/* gh-pages",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngokevin/aframe-component-boilerplate.git"
+    "url": "git+https://github.com/tizzle/aframe-orbit-comtrols-component.git"
   },
   "keywords": [
     "aframe",
@@ -25,12 +25,12 @@
     "mozvr",
     "webvr"
   ],
-  "author": "Kevin Ngo <me@ngokevin.com>",
+  "author": "Till Hinrichs <till@eightdaysaweek.cc>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ngokevin/aframe-component-boilerplate/issues"
+    "url": "https://github.com/tizzle/aframe-orbit-comtrols-component/issues"
   },
-  "homepage": "https://github.com/ngokevin/aframe-component-boilerplate#readme",
+  "homepage": "https://github.com/tizzle/aframe-orbit-comtrols-component#readme",
   "devDependencies": {
     "aframe": "^0.2.0",
     "browserify": "^13.0.0",
