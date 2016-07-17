@@ -12,11 +12,8 @@
             <a-assets>
             </a-assets>
 
-            <a-entity id="camera1" camera="active:true;" position="0 0 10" orbit-controls="autoRotate: false; enableDamping:true; dampingFactor:0.125; rotateSpeed:0.25; target: #target; minDistance:1.5; maxDistance:100;">
-                <a-cone color="#ddee55" radius-bottom="0.5" radius-top="0.15" position="0 0 0" rotation="90 0 0"></a-cone>
+            <a-entity camera position="0 0 10" orbit-controls="autoRotate: false; enableDamping:true; dampingFactor:0.125; rotateSpeed:0.25; target: #target; minDistance:1.5; maxDistance:100;">
             </a-entity>
-
-            <a-entity id="camera2" camera="active:false;" active="true" position="0 10 40"></a-entity>
 
             <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
             <a-entity geometry="primitive: box" scale="1 1 1" position="8 0 0" material="color: #ffffff"></a-entity>

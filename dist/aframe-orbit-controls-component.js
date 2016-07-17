@@ -239,7 +239,7 @@
 
 	        this.camera = camera;
 	        this.cameraType = cameraType;
-	        
+
 	        // console.log( 'targetObject', this.target3D );
 	        // console.log( 'target', this.target );
 	        // console.log( 'camera', this.cameraType, this.camera );
@@ -368,6 +368,9 @@
 
 	        if( this.data.enabled === false ) return;
 
+	        event.preventDefault();
+	        event.stopPropagation();
+
 			this.handleMouseUp( event );
 
 			this.canvasEl.removeEventListener( 'mousemove', this.onMouseMove, false );
@@ -391,8 +394,10 @@
 
 	    // TOUCH
 
-	    onTouchStart: function(event) {
-	        // console.log('onTouchStart');
+	    onTouchStart: function(event)
+	    {
+
+	        console.log('onTouchStart');
 	        if ( this.data.enabled === false ) return;
 
 	        switch (event.touches.length)
@@ -409,7 +414,7 @@
 	                break;
 	            case 3: // three-fingered touch: pan
 	                if ( this.data.enablePan === false ) return;
-	                handleTouchStartPan( event );
+	                this.handleTouchStartPan( event );
 	                this.state = this.STATE.TOUCH_PAN;
 	                break;
 	            default:
@@ -424,7 +429,7 @@
 
 
 	    onTouchMove: function(event) {
-	        // console.log('onTouchMove');
+	        console.log('onTouchMove');
 
 	        if ( this.data.enabled === false ) return;
 
@@ -457,7 +462,7 @@
 
 
 	    onTouchEnd: function(event) {
-	        // console.log('onTouchEnd');
+	        console.log('onTouchEnd');
 
 	        if ( this.data.enabled === false ) return;
 
@@ -588,8 +593,8 @@
 	    // TOUCH
 
 	    handleTouchStartRotate: function(event) {
-	        //console.log( 'handleTouchStartRotate' );
-	        rotateStart.set(event.touches[0].pageX, event.touches[0].pageY);
+	        console.log( 'handleTouchStartRotate' );
+	        this.rotateStart.set(event.touches[0].pageX, event.touches[0].pageY);
 	    },
 
 
@@ -613,9 +618,9 @@
 	        this.rotateEnd.set( event.touches[0].pageX, event.touches[0].pageY );
 	        this.rotateDelta.subVectors( this.rotateEnd, this.rotateStart );
 
-	        var element = this.canvasEl === document ? scope.domElement.body : this.canvasEl;
+	        var element = this.canvasEl === document ? this.canvasEl.body : this.canvasEl;
 	        // rotating across whole screen goes 360 degrees around
-	        this.rotateLeft( 2 * Math.PI * this.rotateDelta.x / element.clientWidth * this.datarotateSpeed );
+	        this.rotateLeft( 2 * Math.PI * this.rotateDelta.x / element.clientWidth * this.data.rotateSpeed );
 	        // rotating up and down along whole screen attempts to go 360, but limited to 180
 	        this.rotateUp( 2 * Math.PI * this.rotateDelta.y / element.clientHeight * this.data.rotateSpeed );
 	        this.rotateStart.copy( this.rotateEnd );

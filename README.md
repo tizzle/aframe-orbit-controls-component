@@ -1,6 +1,6 @@
 ## aframe-orbit-controls-component
 
-A direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
+A (almost) direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
 
 ### API
 
@@ -22,9 +22,13 @@ Install and use by directly including the [browser files](dist):
 </head>
 
 <body>
-  <a-scene>
-    <a-entity orbit-controls="exampleProp: exampleVal"></a-entity>
-  </a-scene>
+    <a-entity id="camera" camera position="0 0 10" orbit-controls="target: #target;"></a-entity>
+
+    <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
+    <a-entity geometry="primitive: box" scale="1 1 1" position="8 0 0" material="color: #ffffff"></a-entity>
+    <a-entity geometry="primitive: box" scale="1 1 1" position="-8 0 0" material="color: #ffffff"></a-entity>
+
+    <a-sky color="#000000"></a-sky>
 </body>
 ```
 
