@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tizzle/aframe-orbit-comtrols-component.git"
+    "url": "git+https://github.com/tizzle/aframe-orbit-controls-component.git"
   },
   "keywords": [
     "aframe",
@@ -28,9 +28,9 @@
   "author": "Till Hinrichs <till@eightdaysaweek.cc>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tizzle/aframe-orbit-comtrols-component/issues"
+    "url": "https://github.com/tizzle/aframe-orbit-controls-component/issues"
   },
-  "homepage": "https://github.com/tizzle/aframe-orbit-comtrols-component#readme",
+  "homepage": "https://github.com/tizzle/aframe-orbit-controls-component#readme",
   "devDependencies": {
     "aframe": "^0.2.0",
     "browserify": "^13.0.0",

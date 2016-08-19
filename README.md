@@ -1,6 +1,7 @@
 ## aframe-orbit-controls-component
 
 A (almost) direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
+Might be useful in responsive applications, to allow desktop users to rotate the camera around an object.
 
 ### API
 
@@ -16,19 +17,39 @@ Install and use by directly including the [browser files](dist):
 
 ```html
 <head>
-  <title>My A-Frame Scene</title>
-  <script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
-  <script src="https://rawgit.com/ngokevin/aframe-component-boilerplate/master/dist/aframe-example-component.min.js"></script>
+  <title>A-Frame using a Camera with Orbit Controls</title>
+  <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+  <script src="https://raw.githubusercontent.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
 </head>
 
 <body>
-    <a-entity id="camera" camera position="0 0 10" orbit-controls="target: #target;"></a-entity>
+    <a-scene>
 
-    <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
-    <a-entity geometry="primitive: box" scale="1 1 1" position="8 0 0" material="color: #ffffff"></a-entity>
-    <a-entity geometry="primitive: box" scale="1 1 1" position="-8 0 0" material="color: #ffffff"></a-entity>
+        <a-entity
+            id="camera"
+            camera
+            position="0 0 5"
+            orbit-controls="
+                autoRotate: false;
+                target: #target;
+                enableDamping: true;
+                dampingFactor: 0.125;
+                rotateSpeed:0.25;
+                minDistance:3;
+                maxDistance:100;"
+            mouse-cursor="">
+        </a-entity>
 
-    <a-sky color="#000000"></a-sky>
+
+        <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
+        <a-entity geometry="primitive: box" scale="1 1 1" position="8 0 0" material="color: #ffffff"></a-entity>
+        <a-entity geometry="primitive: box" scale="1 1 1" position="-8 0 0" material="color: #ffffff"></a-entity>
+        <a-entity geometry="primitive: box" scale="1 1 1" position="16 0 0" material="color: #ffffff"></a-entity>
+        <a-entity geometry="primitive: box" scale="1 1 1" position="-16 0 0" material="color: #ffffff"></a-entity>
+
+        <a-sky color="#000000"></a-sky>
+
+    </a-scene>
 </body>
 ```
 
@@ -37,12 +58,12 @@ Install and use by directly including the [browser files](dist):
 Install via npm:
 
 ```bash
-npm install aframe-example-component
+npm install aframe-orbit-controls-component
 ```
 
 Then register and use.
 
 ```js
 require('aframe');
-require('aframe-example-component');
+require('aframe-orbit-controls-component');
 ```

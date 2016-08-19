@@ -165,7 +165,6 @@ AFRAME.registerComponent('orbit-controls', {
         // console.log( "play");
 
         this.sceneEl = this.el.sceneEl;
-        this.canvasEl = this.sceneEl.canvas;
         this.object = this.el.object3D;
 
         this.targetEl = this.sceneEl.querySelector( this.data.target );
@@ -197,9 +196,16 @@ AFRAME.registerComponent('orbit-controls', {
         // console.log( 'targetObject', this.target3D );
         // console.log( 'target', this.target );
         // console.log( 'camera', this.cameraType, this.camera );
-
-        this.addEventListeners();
+        // 0.3.0
+        this.sceneEl.addEventListener('render-target-loaded', this.handleRenderTargetLoaded.bind(this) );
     },
+
+
+    handleRenderTargetLoaded: function()
+	{
+	    this.canvasEl = this.sceneEl.canvas;
+		this.addEventListeners();
+	},
 
 
     bindMethods: function () {
@@ -592,9 +598,9 @@ AFRAME.registerComponent('orbit-controls', {
         this.dollyEnd.set(0, distance);
         this.dollyDelta.subVectors( this.dollyEnd, this.dollyStart);
         if ( this.dollyDelta.y > 0 ) {
-            this.dollyOut( this.getZoomScale() );
-        } else if ( this.dollyDelta.y < 0 ) {
             this.dollyIn( this.getZoomScale() );
+        } else if ( this.dollyDelta.y < 0 ) {
+            this.dollyOut( this.getZoomScale() );
         }
 
         this.dollyStart.copy( this.dollyEnd );
