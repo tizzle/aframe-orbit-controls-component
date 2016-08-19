@@ -19,7 +19,7 @@ Install and use by directly including the [browser files](dist):
 <head>
   <title>A-Frame using a Camera with Orbit Controls</title>
   <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
-  <script src="https://raw.githubusercontent.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
+  <script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
 </head>
 
 <body>
