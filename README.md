@@ -5,9 +5,30 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 
 ### API
 
-| Property | Description | Default Value |
-| -------- | ----------- | ------------- |
-|          |             |               |
+| Property   | Description | Default Value |
+| ---------- | ----------- | ------------- |
+| enabled | Boolean – defines if the Orbit Controls are used | false
+| target | String – the object the camera is looking at | '' |
+| distance | Number – the distnace of the camera to the target | 1 |
+| enableRotate | Boolean – defines if the camera can be rotated | true |
+| rotateSpeed | Number – rotation speed | 1 |
+| enableZoom | Boolean – defines if the camera can be zoomed in or out | true |
+| zoomSpeed | Number – zoom speed | 1 |
+| enablePan | Boolean – defines if the camera can be panned (using the arrow keys) | true |
+| keyPanSpeed | Number – panning speed | 7 |
+| enableDamping | Boolean – defines if the rotational movement of the camera is damped / eased | false |
+| dampingFactor | Number – damping factor | 0.25 |
+| autoRotate | Boolean – defines if the camera automatically rotates around the target | false |
+| autoRotateSpeed | Number – speed of the automatic rotation | 2 |
+| enableKeys | Boolean – defines if the keyboard can be used | true |
+| minAzimuthAngle | Number – minimum azimuth angle | -Infinity |
+| maxAzimuthAngle | Number – maximum azimuth angle | Infinity |
+| minPolarAngle | Number – minimum polar angle | 0 |
+| maxPolarAngle | Number – maximum polar angle | Math.PI |
+| minZoom | Number – minimum zoom value | 0 |
+| maxZoom | Number – maximum zoom value | Infinity |
+| minDistance | Number – minimum distance | 0 |
+| maxDistance | Number – maximum distance | Infinity |
 
 ### Installation
 
@@ -52,5 +73,3 @@ Install and use by directly including the [browser files](dist):
     </a-scene>
 </body>
 ```
-
-
