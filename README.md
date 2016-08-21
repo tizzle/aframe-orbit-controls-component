@@ -73,3 +73,19 @@ Install and use by directly including the [browser files](dist):
     </a-scene>
 </body>
 ```
+
+
+#### npm
+
+Install via npm:
+
+```bash
+npm install aframe-sprite-component
+```
+
+Then register and use.
+
+```js
+require('aframe');
+require('aframe-sprite-component');
+```
