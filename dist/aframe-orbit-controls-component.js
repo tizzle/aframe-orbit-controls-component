@@ -343,6 +343,9 @@
 				this.canvasEl.addEventListener( 'mousemove', this.onMouseMove, false );
 				this.canvasEl.addEventListener( 'mouseup', this.onMouseUp, false );
 				this.canvasEl.addEventListener( 'mouseout', this.onMouseUp, false );
+
+	            // this.el.emit('startDragOrbitControls',{});
+	            this.el.emit('start-drag-orbit-controls', null, false);
 			}
 	    },
 
@@ -384,6 +387,9 @@
 			this.canvasEl.removeEventListener( 'mouseout', this.onMouseUp, false );
 
 			this.state = this.STATE.NONE;
+
+	        // this.canvasEl.emit('endDragOrbitControls');
+	        this.el.emit('end-drag-orbit-controls', null, false);
 	    },
 
 
@@ -403,7 +409,7 @@
 	    onTouchStart: function(event)
 	    {
 
-	        console.log('onTouchStart');
+	        // console.log('onTouchStart');
 	        if ( this.data.enabled === false ) return;
 
 	        switch (event.touches.length)
@@ -429,13 +435,14 @@
 
 	        if ( this.state !== this.STATE.NONE )
 	        {
-	            // this.dispatchEvent( this.startEvent );
+	            // this.canvasEl.emit('startDragOrbitControls');
+	            this.el.emit('start-drag-orbit-controls', null, false);
 	        }
 	    },
 
 
 	    onTouchMove: function(event) {
-	        console.log('onTouchMove');
+	        // console.log('onTouchMove');
 
 	        if ( this.data.enabled === false ) return;
 
@@ -468,13 +475,14 @@
 
 
 	    onTouchEnd: function(event) {
-	        console.log('onTouchEnd');
+	        // console.log('onTouchEnd');
 
 	        if ( this.data.enabled === false ) return;
 
 	        this.handleTouchEnd(event);
 
-	        // this.dispatchEvent(endEvent);
+	        // this.canvasEl.emit('endDragOrbitControls');
+	        this.el.emit('end-drag-orbit-controls', null, false);
 
 	        this.state = this.STATE.NONE;
 	    },
@@ -599,7 +607,7 @@
 	    // TOUCH
 
 	    handleTouchStartRotate: function(event) {
-	        console.log( 'handleTouchStartRotate' );
+	        // console.log( 'handleTouchStartRotate' );
 	        this.rotateStart.set(event.touches[0].pageX, event.touches[0].pageY);
 	    },
 
@@ -865,6 +873,9 @@
 			if ( this.zoomChanged ||
 				lastPosition.distanceToSquared( this.object.position ) > this.EPS ||
 				8 * ( 1 - lastQuaternion.dot( this.object.quaternion ) ) > this.EPS ) {
+
+	            // this.canvasEl.dispatchEvent( this.changeEvent );
+	            this.el.emit('change-drag-orbit-controls', null, false);
 
 				lastPosition.copy( this.object.position );
 				lastQuaternion.copy( this.object.quaternion );

@@ -7,7 +7,7 @@
 
 <body>
     <div id="aframe">
-        <a-scene>
+        <a-scene id="a-scene">
 
             <a-entity
                 id="camera"
@@ -35,6 +35,34 @@
 
         </a-scene>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event)
+        {
+            var scene = document.querySelector('a-scene');
+
+            if (scene.hasLoaded) addEventListeners();
+            else scene.addEventListener( 'loaded', addEventListeners );
+        });
+
+        function addEventListeners()
+        {
+            console.log( 'add event listeners' );
+            // var canvas = document.querySelector('#a-scene').canvas;
+            document.querySelector('#camera').addEventListener('start-drag-orbit-controls', handleDragStart );
+            document.querySelector('#camera').addEventListener('end-drag-orbit-controls', handleDragEnd );
+        }
+
+        function handleDragStart( event )
+        {
+            console.log( "drag start" );
+        }
+
+        function handleDragEnd( event )
+        {
+            console.log( "drag end" );
+        }
+    </script>
 
 
 </body>
