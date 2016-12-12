@@ -24,6 +24,12 @@
                 mouse-cursor="">
             </a-entity>
 
+            <a-entity
+                id = "camera2"
+                camera
+                position = "0 0 10" >
+            </a-entity>
+
 
             <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
             <a-entity geometry="primitive: box" scale="1 1 1" position="8 0 0" material="color: #ffffff"></a-entity>
@@ -34,6 +40,10 @@
             <a-sky color="#000000"></a-sky>
 
         </a-scene>
+    </div>
+
+    <div style="position:absolute; top:0; left:0; padding:12px;" >
+        <button id="changeCamera">Change Camera</button>
     </div>
 
     <script>
@@ -48,9 +58,13 @@
         function addEventListeners()
         {
             console.log( 'add event listeners' );
-            // var canvas = document.querySelector('#a-scene').canvas;
+
+            // ORBIT CAMERA DRAG START / END EVENTS LISTENER
             document.querySelector('#camera').addEventListener('start-drag-orbit-controls', handleDragStart );
             document.querySelector('#camera').addEventListener('end-drag-orbit-controls', handleDragEnd );
+
+            // TOGGLE ORBIT AND STATIC CAMERA
+            document.querySelector('#changeCamera').addEventListener( 'click', handleSwitchCamera );
         }
 
         function handleDragStart( event )
@@ -61,6 +75,21 @@
         function handleDragEnd( event )
         {
             console.log( "drag end" );
+        }
+
+        function handleSwitchCamera( event )
+        {
+            var cam1 = document.querySelector('#camera');
+            var cam2 = document.querySelector('#camera2');
+
+            if( cam1.components.camera.data.active )
+            {
+                cam2.setAttribute('camera', 'active', true);
+            }
+            else 
+            {
+                cam1.setAttribute('camera', 'active', true);
+            }
         }
     </script>
 
