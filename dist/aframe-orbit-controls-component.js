@@ -244,6 +244,8 @@
 	        // console.log( 'camera', this.cameraType, this.camera );
 	        // 0.3.0
 	        this.sceneEl.addEventListener('render-target-loaded', this.handleRenderTargetLoaded.bind(this) );
+
+	        if( this.canvasEl ) this.addEventListeners();
 	    },
 
 
@@ -265,7 +267,6 @@
 	        this.onTouchEnd = this.onTouchEnd.bind(this);
 	        this.onKeyDown = this.onKeyDown.bind(this);
 	    },
-
 
 
 	    addEventListeners: function() {
