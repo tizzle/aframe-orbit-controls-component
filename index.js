@@ -262,7 +262,6 @@ AFRAME.registerComponent('orbit-controls', {
     // CONTEXT MENU
 
     onContextMenu: function(event) {
-        // console.log('onContextMenu');
         event.preventDefault();
     },
 
@@ -289,7 +288,7 @@ AFRAME.registerComponent('orbit-controls', {
         }
         else if ( event.button === this.mouseButtons.PAN )
         {
-            if ( this.data.enablePan === false) return;
+            if ( this.data.enablePan === false ) return;
             this.handleMouseDownPan( event );
             this.state = this.STATE.PAN;
         }
@@ -299,7 +298,6 @@ AFRAME.registerComponent('orbit-controls', {
 			this.canvasEl.addEventListener( 'mouseup', this.onMouseUp, false );
 			this.canvasEl.addEventListener( 'mouseout', this.onMouseUp, false );
 
-            // this.el.emit('startDragOrbitControls',{});
             this.el.emit('start-drag-orbit-controls', null, false);
 		}
     },
@@ -328,7 +326,6 @@ AFRAME.registerComponent('orbit-controls', {
 
 
     onMouseUp: function(event) {
-        // console.log('onMouseUp');
 
         if( this.data.enabled === false ) return;
 
@@ -343,7 +340,6 @@ AFRAME.registerComponent('orbit-controls', {
 
 		this.state = this.STATE.NONE;
 
-        // this.canvasEl.emit('endDragOrbitControls');
         this.el.emit('end-drag-orbit-controls', null, false);
     },
 
@@ -351,7 +347,6 @@ AFRAME.registerComponent('orbit-controls', {
     // MOUSE WHEEL
 
     onMouseWheel: function(event) {
-        // console.log('onMouseWheel');
         if (this.data.enabled === false || this.data.enableZoom === false || ( this.state !== this.STATE.NONE && this.state !== this.STATE.ROTATE)) return;
         event.preventDefault();
         event.stopPropagation();
@@ -364,7 +359,6 @@ AFRAME.registerComponent('orbit-controls', {
     onTouchStart: function(event)
     {
 
-        // console.log('onTouchStart');
         if ( this.data.enabled === false ) return;
 
         switch (event.touches.length)
@@ -465,7 +459,7 @@ AFRAME.registerComponent('orbit-controls', {
 
 
     handleMouseDownDolly: function(event) {
-        //console.log( 'handleMouseDownDolly' );
+        // console.log( 'handleMouseDownDolly' );
         this.dollyStart.set( event.clientX, event.clientY );
     },
 
@@ -505,7 +499,7 @@ AFRAME.registerComponent('orbit-controls', {
         if ( this.dollyDelta.y > 0 ) {
             this.dollyIn( this.getZoomScale() );
         }
-        else if ( dollyDelta.y < 0 ) {
+        else if ( this.dollyDelta.y < 0 ) {
             this.dollyOut( this.getZoomScale() );
         }
 
@@ -678,7 +672,9 @@ AFRAME.registerComponent('orbit-controls', {
 		this.sphericalDelta.phi -= angle;
 	},
 
-    panLeft: function(distance, objectMatrix) {
+
+    panHorizontally: function(distance, objectMatrix) {
+        // console.log('pan horizontally', distance, objectMatrix);
         var v = new THREE.Vector3();
         v.setFromMatrixColumn( objectMatrix, 0 ); // get X column of objectMatrix
         v.multiplyScalar( -distance );
@@ -686,7 +682,8 @@ AFRAME.registerComponent('orbit-controls', {
     },
 
 
-    panUp: function( distance, objectMatrix ) {
+    panVertically: function( distance, objectMatrix ) {
+        // console.log('pan vertically', distance, objectMatrix);
         var v = new THREE.Vector3();
         v.setFromMatrixColumn( objectMatrix, 1 ); // get Y column of objectMatrix
         v.multiplyScalar( distance );
@@ -694,27 +691,33 @@ AFRAME.registerComponent('orbit-controls', {
     },
 
     pan: function( deltaX, deltaY ) { // deltaX and deltaY are in pixels; right and down are positive
-        // var offset = new THREE.Vector3();
-        // var element = this.canvasEl === document ? this.canvasEl.body : this.canvasEl;
-        // if ( this.cameraType === 'PerspectiveCamera'  ) // perspective
-        // {
-        //     var position = this.object.position;
-        //     offset.copy( position ).sub( this.target );
-        //     var targetDistance = offset.length();
-        //     targetDistance *= Math.tan(( this.object.fov / 2 ) * Math.PI / 180.0 ); // half of the fov is center to top of screen
-        //
-        //     this.panLeft(2 * deltaX * targetDistance / element.clientHeight, this.object.matrix); // we actually don't use screenWidth, since perspective camera is fixed to screen height
-        //     this.panUp(2 * deltaY * targetDistance / element.clientHeight, this.object.matrix);
-        // }
-        // else if ( this.cameraType === 'OrthographicCamera' ) // orthographic
-        // {
-        //     this.panLeft(deltaX * ( this.object.right - this.object.left ) / this.camera.zoom / element.clientWidth, this.object.matrix );
-        //     this.panUp(deltaY * ( this.object.top - this.object.bottom ) / this.camera.zoom / element.clientHeight, this.object.matrix);
-        // }
-        // else { // camera neither orthographic nor perspective
-        //     console.warn('Trying to pan: WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.');
-        //     this.data.enablePan = false;
-        // }
+        // console.log('panning', deltaX, deltaY );
+        var offset = new THREE.Vector3();
+        var element = this.canvasEl === document ? this.canvasEl.body : this.canvasEl;
+
+        if ( this.cameraType === 'PerspectiveCamera'  )
+        {
+            // perspective
+            var position = this.object.position;
+            offset.copy( position ).sub( this.target );
+            var targetDistance = offset.length();
+            targetDistance *= Math.tan(( this.camera.fov / 2 ) * Math.PI / 180.0 ); // half of the fov is center to top of screen
+
+            this.panHorizontally(2 * deltaX * targetDistance / element.clientHeight, this.object.matrix); // we actually don't use screenWidth, since perspective camera is fixed to screen height
+            this.panVertically(2 * deltaY * targetDistance / element.clientHeight, this.object.matrix);
+        }
+        else if ( this.cameraType === 'OrthographicCamera' )
+        {
+            // orthographic
+            this.panHorizontally(deltaX * ( this.object.right - this.object.left ) / this.camera.zoom / element.clientWidth, this.object.matrix );
+            this.panVertically(deltaY * ( this.object.top - this.object.bottom ) / this.camera.zoom / element.clientHeight, this.object.matrix);
+        }
+        else {
+            // camera neither orthographic nor perspective
+            console.warn('Trying to pan: WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.');
+            this.data.enablePan = false;
+        }
+
     },
 
     dollyIn: function( dollyScale ) {
@@ -771,7 +774,6 @@ AFRAME.registerComponent('orbit-controls', {
 		var lastPosition = new THREE.Vector3();
 		var lastQuaternion = new THREE.Quaternion();
 
-		// var position = this.object.position;
         var position = this.el.object3D.position;
 
 		offset.copy( position ).sub( this.target );
@@ -796,20 +798,14 @@ AFRAME.registerComponent('orbit-controls', {
 		this.target.add( this.panOffset ); // move target to panned location
 
 		offset.setFromSpherical( this.spherical );
-
         offset.applyQuaternion( quatInverse ); // rotate offset back to "camera-up-vector-is-up" space
         position.copy( this.target ).add( offset );
 
 
-        var target3D = this.target3D;
-        if (target3D)
+        if ( this.target)
         {
-            // this.object.lookAt(this.vector.setFromMatrixPosition(target3D.matrixWorld).inverse());
-            this.lookAwayFrom( this.object, this.target3D );
+            this.lookAwayFrom( this.object, this.target );
         }
-        // this.object.lookAt( this.target );
-
-        // console.log( 'rot:', this.object.rotation.x, this.object.rotation.y, this.object.rotation.z );
 
 		if ( this.data.enableDamping === true ) {
 			this.sphericalDelta.theta *= ( 1 - this.data.dampingFactor );
@@ -845,7 +841,7 @@ AFRAME.registerComponent('orbit-controls', {
 
     lookAwayFrom : function( object, target) {
         var v = new THREE.Vector3();
-        v.subVectors( object.position, target.position ).add( object.position );
+        v.subVectors( object.position, target ).add( object.position );
         object.lookAt(v);
     }
 
