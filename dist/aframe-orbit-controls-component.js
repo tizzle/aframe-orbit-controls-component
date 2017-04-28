@@ -42,7 +42,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/* global AFRAME */
 
@@ -231,8 +231,25 @@
 	                cameraType = 'OrthographicCamera';
 	            }
 	            else {
-	                camera = undefined;
-	                cameraType = 'undefined';
+	                if(typeof camera === 'undefined'){
+	                    child.traverse( function( child2 )
+	                    {
+	                        if( child2 instanceof THREE.PerspectiveCamera )
+	                        {
+	                            camera = child2;
+	                            cameraType = 'PerspectiveCamera';
+	                        }
+	                        else if ( child2 instanceof THREE.OrthographicCamera )
+	                        {
+	                            camera = child2;
+	                            cameraType = 'OrthographicCamera';
+	                        }
+	                        else {
+	                            camera = undefined;
+	                            cameraType = 'undefined';
+	                        }
+	                    } );
+	                }
 	            }
 	        } );
 
@@ -895,5 +912,5 @@
 	});
 
 
-/***/ }
+/***/ })
 /******/ ]);
