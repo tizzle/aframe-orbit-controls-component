@@ -59,6 +59,8 @@ Install and use by directly including the [browser files](dist):
                 minDistance:3;
                 maxDistance:100;"
             mouse-cursor="">
+            <a-light light="type: directional; color: #fff; intensity: 0.8;" position="-1 1 0"></a-light>
+            <a-light light="type: point; color: #fff; intensity: 0.3;" position="0 5 0"></a-light>
         </a-entity>
 
 
