@@ -289,7 +289,13 @@ AFRAME.registerComponent('orbit-controls', {
 
         if( this.data.enabled === false ) return;
 
-        if ( event.button === this.mouseButtons.ORBIT )
+        if ( event.button === this.mouseButtons.ORBIT && (event.shiftKey || event.ctrlKey) )
+        {
+            if ( this.data.enablePan === false ) return;
+            this.handleMouseDownPan( event );
+            this.state = this.STATE.PAN;
+        }
+        else if ( event.button === this.mouseButtons.ORBIT )
         {
             this.panOffset.set( 0, 0, 0 );
 			if ( this.data.enableRotate === false ) return;
