@@ -75,6 +75,10 @@ AFRAME.registerComponent('orbit-controls', {
         maxDistance: {
             default: Infinity
         },
+        vrCamera: {
+            type: 'string',
+            default: null
+        }
     },
 
     /**
@@ -168,6 +172,7 @@ AFRAME.registerComponent('orbit-controls', {
         this.object = this.el.object3D;
 
         this.targetEl = this.sceneEl.querySelector( this.data.target );
+        if (!this.targetEl) {console.warn('Could not find orbit-control target (' + this.data.target + ') in document. Aborting. '); return;}
         this.target3D = this.targetEl.object3D;
         this.target = this.target3D.position.clone();
 
@@ -215,6 +220,12 @@ AFRAME.registerComponent('orbit-controls', {
         // console.log( 'camera', this.cameraType, this.camera );
         // 0.3.0
         this.sceneEl.addEventListener('render-target-loaded', this.handleRenderTargetLoaded.bind(this) );
+
+        if (this.data.vrCamera && !this.data.alreadyAdddedVRListener) {
+            this.sceneEl.addEventListener('enter-vr', this.onEnterVR.bind(this) );
+            this.sceneEl.addEventListener('exit-vr', this.onExitVR.bind(this) );
+            this.data.alreadyAdddedVRListener=true;
+        }
 
         if( this.canvasEl ) this.addEventListeners();
     },
@@ -282,6 +293,20 @@ AFRAME.registerComponent('orbit-controls', {
         event.preventDefault();
     },
 
+    onEnterVR: function(event){
+        // console.log("entering VR mode");
+
+        this.el.setAttribute('camera', 'active', false);
+        document.querySelector(this.data.vrCamera).setAttribute('camera', 'active', true);
+
+    },
+    onExitVR: function(event){
+        // console.log("leaving  VR mode");
+
+        this.el.setAttribute('camera', 'active', true);
+        document.querySelector(this.data.vrCamera).setAttribute('camera', 'active', false);
+
+    },
 
     // MOUSE
 
