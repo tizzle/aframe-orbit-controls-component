@@ -87,7 +87,7 @@ AFRAME.registerComponent('orbit-controls', {
      */
     init: function()
     {
-        this.STATE = { NONE : - 1, ROTATE : 0, DOLLY : 1, PAN : 2, TOUCH_ROTATE : 3, TOUCH_DOLLY : 4, TOUCH_PAN : 5 };
+        this.STATE = { NONE : - 1, ROTATE : 0, DOLLY : 1, PAN : 2, TOUCH_ROTATE : 3, TOUCH_DOLLY : 4, TOUCH_PAN : 5, ROTATE_TO: 6 };
         this.state = this.STATE.NONE;
 
         this.EPS = 0.000001;
@@ -112,6 +112,7 @@ AFRAME.registerComponent('orbit-controls', {
     	this.dollyDelta = new THREE.Vector2();
 
         this.vector = new THREE.Vector3();
+        this.desiredPosition = new THREE.Vector3();
 
         this.mouseButtons = {
             ORBIT: THREE.MOUSE.LEFT,
@@ -689,6 +690,14 @@ AFRAME.registerComponent('orbit-controls', {
 		this.sphericalDelta.phi -= angle;
 	},
 
+  rotateTo: function ( x, y, z ) {
+    console.log('OrbitControls: current position', this.object.position)
+    if (x === undefined || y === undefined || z === undefined ) {
+      return console.log( 'OrbitControls: rotateTo() method requires 3 parameters: rotateTo( x, y, x )');
+    }
+    this.state = this.STATE.ROTATE_TO;
+    this.desiredPosition = new THREE.Vector3(x, y, z);
+  },
 
     panHorizontally: function(distance, objectMatrix) {
         // console.log('pan horizontally', distance, objectMatrix);
@@ -782,6 +791,9 @@ AFRAME.registerComponent('orbit-controls', {
     updateView: function()
     {
         // console.log( 'update view' );
+        if (this.desiredPosition && this.state  === this.STATE.ROTATE_TO) {
+          this.object.position.lerp(this.desiredPosition, 0.2);
+        }
 
         var offset = new THREE.Vector3();
 
