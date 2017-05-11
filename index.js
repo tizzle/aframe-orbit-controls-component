@@ -75,6 +75,10 @@ AFRAME.registerComponent('orbit-controls', {
         maxDistance: {
             default: Infinity
         },
+        rotateTo: {
+          type: 'vec3',
+          default: '0 0 0'
+        }
     },
 
     /**
@@ -134,7 +138,15 @@ AFRAME.registerComponent('orbit-controls', {
      * Called when component is attached and when component data changes.
      * Generally modifies the entity based on the data.
      */
-    update: function(oldData) {},
+    update: function(oldData) {
+      // Create rotateTo Vector3
+      var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z)
+      // Check if rotateToVec3 is already desiredPosition
+      if ( !this.desiredPosition.equals(rotateToVec3) ) {
+        this.desiredPosition.copy(rotateToVec3)
+        this.rotateTo(this.desiredPosition)
+      }
+    },
 
     /**
      * Called when a component is removed (e.g., via removeAttribute).
@@ -690,13 +702,10 @@ AFRAME.registerComponent('orbit-controls', {
 		this.sphericalDelta.phi -= angle;
 	},
 
-  rotateTo: function ( x, y, z ) {
-    console.log('OrbitControls: current position', this.object.position)
-    if (x === undefined || y === undefined || z === undefined ) {
-      return console.log( 'OrbitControls: rotateTo() method requires 3 parameters: rotateTo( x, y, x )');
-    }
+  rotateTo: function ( vec3 ) {
+    console.log('OrbitControls: current position', this.el.object3D.position);
     this.state = this.STATE.ROTATE_TO;
-    this.desiredPosition = new THREE.Vector3(x, y, z);
+    this.desiredPosition.copy(vec3);
   },
 
     panHorizontally: function(distance, objectMatrix) {
