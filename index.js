@@ -78,6 +78,10 @@ AFRAME.registerComponent('orbit-controls', {
         rotateTo: {
           type: 'vec3',
           default: '0 0 0'
+        },
+        logPosition: {
+          type: 'boolean',
+          default: false
         }
     },
 
@@ -157,9 +161,13 @@ AFRAME.registerComponent('orbit-controls', {
     /**
      * Called on each scene tick.
      */
-    tick: function(t)
-    {
-        this.updateView();
+    tick: function(t) {
+      this.updateView();
+
+      // Log position while rotating
+      if (this.data.logPosition === true && this.state === this.STATE.ROTATE) {
+        console.log(this.el.object3D.position)
+      }
     },
 
     /**
