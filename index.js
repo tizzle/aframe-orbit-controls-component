@@ -809,7 +809,7 @@ AFRAME.registerComponent('orbit-controls', {
     {
         // console.log( 'update view' );
         if (this.desiredPosition && this.state  === this.STATE.ROTATE_TO) {
-          this.object.position.lerp(this.desiredPosition, 0.2);
+          this.object.position.lerp(this.desiredPosition, this.data.dampingFactor);
         }
 
         var offset = new THREE.Vector3();
