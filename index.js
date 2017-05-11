@@ -715,7 +715,7 @@ AFRAME.registerComponent('orbit-controls', {
 	},
 
   rotateTo: function ( vec3 ) {
-    console.log('OrbitControls: current position', this.el.object3D.position);
+    if (this.data.logPosition) console.log('OrbitControls: current position', this.el.object3D.position);
     this.state = this.STATE.ROTATE_TO;
     this.desiredPosition.copy(vec3);
   },
