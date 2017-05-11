@@ -371,6 +371,9 @@ AFRAME.registerComponent('orbit-controls', {
 
         if( this.data.enabled === false ) return;
 
+        // do not cancel ROTATE_TO if event triggered by mouseClick
+        if (this.state === this.STATE.ROTATE_TO) return;
+
         event.preventDefault();
         event.stopPropagation();
 
@@ -813,8 +816,6 @@ AFRAME.registerComponent('orbit-controls', {
     {
         // console.log( 'update view' );
         if (this.desiredPosition && this.state  === this.STATE.ROTATE_TO) {
-          var angle = this.object.position.angleTo(this.desiredPosition)
-
           var desiredSpherical = new THREE.Spherical
           desiredSpherical.setFromVector3(this.desiredPosition)
           var phiDiff = desiredSpherical.phi - this.spherical.phi
