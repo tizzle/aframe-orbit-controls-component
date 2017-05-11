@@ -29,6 +29,9 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 | maxZoom | Number – maximum zoom value | Infinity |
 | minDistance | Number – minimum distance | 0 |
 | maxDistance | Number – maximum distance | Infinity |
+| rotateTo | Vector3 – position to rotate to | '0 0 0' |
+| rotateToSpeed | Number – rotateTo speed | 0.05 |
+| logPosition | Boolean – prints out camera position to console.log() when rotating | true |
 
 ### Installation
 
