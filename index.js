@@ -813,7 +813,13 @@ AFRAME.registerComponent('orbit-controls', {
     {
         // console.log( 'update view' );
         if (this.desiredPosition && this.state  === this.STATE.ROTATE_TO) {
-          this.object.position.lerp(this.desiredPosition, this.data.rotateToSpeed);
+          var angle = this.object.position.angleTo(this.desiredPosition)
+
+          var desiredSpherical = new THREE.Spherical
+          desiredSpherical.setFromVector3(this.desiredPosition)
+          var phiDiff = desiredSpherical.phi - this.spherical.phi
+          var thetaDiff = desiredSpherical.theta - this.spherical.theta
+          this.sphericalDelta.set(this.spherical.radius, phiDiff * this.data.rotateToSpeed, thetaDiff * this.data.rotateToSpeed)
         }
 
         var offset = new THREE.Vector3();
