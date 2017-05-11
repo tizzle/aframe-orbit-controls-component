@@ -79,6 +79,10 @@ AFRAME.registerComponent('orbit-controls', {
           type: 'vec3',
           default: '0 0 0'
         },
+        rotateToSpeed: {
+          type: 'number',
+          default: 0.05
+        },
         logPosition: {
           type: 'boolean',
           default: false
@@ -809,7 +813,7 @@ AFRAME.registerComponent('orbit-controls', {
     {
         // console.log( 'update view' );
         if (this.desiredPosition && this.state  === this.STATE.ROTATE_TO) {
-          this.object.position.lerp(this.desiredPosition, this.data.dampingFactor);
+          this.object.position.lerp(this.desiredPosition, this.data.rotateToSpeed);
         }
 
         var offset = new THREE.Vector3();
