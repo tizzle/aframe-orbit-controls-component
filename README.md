@@ -50,31 +50,39 @@ Install and use by directly including the [browser files](dist):
 <body>
     <a-scene>
 
-        <a-entity
-            id="camera"
-            camera
-            position="0 0 5"
-            orbit-controls="
-                autoRotate: false;
-                target: #target;
-                enableDamping: true;
-                dampingFactor: 0.125;
-                rotateSpeed:0.25;
-                minDistance:3;
-                maxDistance:100;"
-            mouse-cursor="">
-            <a-light light="type: directional; color: #fff; intensity: 0.8;" position="-1 1 0"></a-light>
-            <a-light light="type: point; color: #fff; intensity: 0.3;" position="0 5 0"></a-light>
-        </a-entity>
+      <a-entity
+          id="camera"
+          camera="fov: 80; zoom: 1;"
+          position="0 2 5"
+          orbit-controls="
+              autoRotate: false;
+              target: #target;
+              enableDamping: true;
+              dampingFactor: 0.125;
+              rotateSpeed:0.25;
+              minDistance:3;
+              maxDistance:100;
+              "
+          mouse-cursor="">
+          <a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".33 1 .33" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
+      </a-entity>
 
+      <a-entity
+          id = "camera2"
+          camera
+          position = "5 3 5"
+          rotation = "-25 45 0"
+          >
+      </a-entity>
 
-        <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
-        <a-entity geometry="primitive: box" scale="1 1 1" position="8 0 0" material="color: #ffffff"></a-entity>
-        <a-entity geometry="primitive: box" scale="1 1 1" position="-8 0 0" material="color: #ffffff"></a-entity>
-        <a-entity geometry="primitive: box" scale="1 1 1" position="16 0 0" material="color: #ffffff"></a-entity>
-        <a-entity geometry="primitive: box" scale="1 1 1" position="-16 0 0" material="color: #ffffff"></a-entity>
+      <a-entity id="target">
+          <a-box id="box" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
+          <a-sphere id="sphere" position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
+          <a-cylinder id="cylinder" position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+          <a-plane position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      </a-entity>
 
-        <a-sky color="#000000"></a-sky>
+      <a-sky color="#ECECEC"></a-sky>
 
     </a-scene>
 </body>
