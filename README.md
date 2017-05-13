@@ -34,10 +34,6 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 | logPosition | Boolean – prints out camera position to console.log() when rotating | true |
 
 
-### Events
-
-
-
 ### Installation
 
 #### Browser
