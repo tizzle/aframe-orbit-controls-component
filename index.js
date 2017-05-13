@@ -155,7 +155,7 @@ AFRAME.registerComponent('orbit-controls', {
      * Generally modifies the entity based on the data.
      */
     update: function(oldData) {
-      console.log("component update");
+        console.log("component update");
     },
 
     /**
@@ -163,7 +163,7 @@ AFRAME.registerComponent('orbit-controls', {
      * Generally undoes all modifications to the entity.
      */
     remove: function() {
-      console.log("component remove");
+        console.log("component remove");
     },
 
     /**
@@ -188,8 +188,8 @@ AFRAME.registerComponent('orbit-controls', {
      */
     play: function() {
 
-        console.log( "object", this.object );
-        console.log( "dolly", this.dolly );
+        console.log("object", this.object);
+        console.log("dolly", this.dolly);
 
         var camera, cameraType;
         this.object.traverse(function(child) {
@@ -276,11 +276,15 @@ AFRAME.registerComponent('orbit-controls', {
     // MOUSE
 
     onMouseDown: function(event) {
-      // console.log('onMouseDown');
+        // console.log('onMouseDown');
 
         if (this.data.enabled === false) return;
 
-        if (event.button === this.mouseButtons.ORBIT) {
+        if (event.button === this.mouseButtons.ORBIT && (event.shiftKey || event.ctrlKey)) {
+            if (this.data.enablePan === false) return;
+            this.handleMouseDownPan(event);
+            this.state = this.STATE.PAN;
+        } else if (event.button === this.mouseButtons.ORBIT) {
             this.panOffset.set(0, 0, 0);
             if (this.data.enableRotate === false) return;
             this.handleMouseDownRotate(event);
@@ -754,10 +758,10 @@ AFRAME.registerComponent('orbit-controls', {
 
         var offset = new THREE.Vector3();
 
-        var quat = new THREE.Quaternion().setFromUnitVectors( this.dolly.up, new THREE.Vector3(0, 1, 0) ); // so camera.up is the orbit axis
+        var quat = new THREE.Quaternion().setFromUnitVectors(this.dolly.up, new THREE.Vector3(0, 1, 0)); // so camera.up is the orbit axis
         var quatInverse = quat.clone().inverse();
 
-        offset.copy( this.dolly.position ).sub( this.target );
+        offset.copy(this.dolly.position).sub(this.target);
         offset.applyQuaternion(quat); // rotate offset to "y-axis-is-up" space
         this.spherical.setFromVector3(offset); // angle from z-axis around y-axis
 
@@ -779,7 +783,7 @@ AFRAME.registerComponent('orbit-controls', {
         this.dolly.position.copy(this.target).add(offset);
 
         if (this.target) {
-            this.lookAtTarget(this.dolly, this.target );
+            this.lookAtTarget(this.dolly, this.target);
         }
 
         if (this.data.enableDamping === true) {
@@ -807,15 +811,15 @@ AFRAME.registerComponent('orbit-controls', {
             hmdEuler.setFromQuaternion(hmdQuaternion, 'YXZ');
 
             this.el.setAttribute('position', {
-              x:this.dolly.position.x,
-              y:this.dolly.position.y,
-              z:this.dolly.position.z
+                x: this.dolly.position.x,
+                y: this.dolly.position.y,
+                z: this.dolly.position.z
             })
 
             this.el.setAttribute('rotation', {
-              x:radToDeg(hmdEuler.x),
-              y:radToDeg(hmdEuler.y),
-              z:radToDeg(hmdEuler.z)
+                x: radToDeg(hmdEuler.x),
+                y: radToDeg(hmdEuler.y),
+                z: radToDeg(hmdEuler.z)
             })
 
             this.lastPosition.copy(this.dolly.position);
@@ -830,19 +834,19 @@ AFRAME.registerComponent('orbit-controls', {
     },
 
 
-    lookAtTarget: function( object, target ) {
-      var v = new THREE.Vector3();
-      v.subVectors( object.position, target ).add( object.position );
-      object.lookAt(v);
+    lookAtTarget: function(object, target) {
+        var v = new THREE.Vector3();
+        v.subVectors(object.position, target).add(object.position);
+        object.lookAt(v);
     },
 
 
-    calculateHMDQuaternion: (function () {
-      var hmdQuaternion = new THREE.Quaternion();
-      return function () {
-        hmdQuaternion.copy(this.dolly.quaternion);
-        return hmdQuaternion;
-      };
+    calculateHMDQuaternion: (function() {
+        var hmdQuaternion = new THREE.Quaternion();
+        return function() {
+            hmdQuaternion.copy(this.dolly.quaternion);
+            return hmdQuaternion;
+        };
     })(),
 
 
