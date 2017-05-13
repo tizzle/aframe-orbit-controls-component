@@ -20,16 +20,22 @@
                     dampingFactor: 0.125;
                     rotateSpeed:0.25;
                     minDistance:3;
-                    maxDistance:100;"
+                    maxDistance:100;
+                    minZoom:0;
+                    maxZoom:5;
+                    "
                 mouse-cursor="">
-                <a-light light="type: directional; color: #fff; intensity: 0.8;" position="-1 1 0"></a-light>
-                <a-light light="type: point; color: #fff; intensity: 0.3;" position="0 5 0"></a-light>
+                <!-- <a-light light="type: directional; color: #fff; intensity: 0.8;" position="-1 1 0"></a-light>
+                <a-light light="type: point; color: #fff; intensity: 0.3;" position="0 5 0"></a-light> -->
+                <a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".5 1.5 .5" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
             </a-entity>
 
             <a-entity
                 id = "camera2"
                 camera
-                position = "0 0 10" >
+                position = "10 3 10"
+                rotation = "-25 45 0"
+                >
             </a-entity>
 
             <a-entity id="target" geometry="primitive: box" scale="1 1 1" position="0 0 0" material="color: #cc0000"></a-entity>
@@ -48,6 +54,12 @@
     </div>
 
     <script>
+
+        var lastCameraState = {
+          position:"0 0 5",
+          rotation:"0 0 0"
+        }
+
         document.addEventListener("DOMContentLoaded", function(event)
         {
             var scene = document.querySelector('a-scene');
@@ -60,7 +72,7 @@
         {
             console.log( 'add event listeners' );
 
-            // ORBIT CAMERA DRAG START / END EVENTS LISTENER
+            // ORBIT CAMERA DRAG START / END EVENT LISTENERS
             document.querySelector('#camera').addEventListener('start-drag-orbit-controls', handleDragStart );
             document.querySelector('#camera').addEventListener('end-drag-orbit-controls', handleDragEnd );
 
@@ -76,12 +88,20 @@
         function handleDragEnd( event )
         {
             console.log( "drag end" );
+
+            var cam1 = document.querySelector('#camera');
+            // console.log(cam1.getAttribute('position'));
+            // console.log(cam1.getAttribute('rotation'));
+            // console.log(cam1);
         }
 
         function handleSwitchCamera( event )
         {
             var cam1 = document.querySelector('#camera');
             var cam2 = document.querySelector('#camera2');
+
+            // console.log(cam1.getAttribute('position'));
+            // console.log(cam1.getAttribute('rotation'));
 
             if( cam1.components.camera.data.active )
             {
@@ -90,6 +110,8 @@
             else
             {
                 cam1.setAttribute('camera', 'active', true);
+                // cam1.setAttribute('position', lastCameraState.position, true);
+                // cam1.setAttribute('rotation', lastCameraState.rotation, true);
             }
         }
     </script>

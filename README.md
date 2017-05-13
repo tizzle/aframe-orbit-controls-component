@@ -8,8 +8,8 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 | Property   | Description | Default Value |
 | ---------- | ----------- | ------------- |
 | enabled | Boolean – defines if the Orbit Controls are used | false
-| target | String – the object the camera is looking at | '' |
-| distance | Number – the distnace of the camera to the target | 1 |
+| target | String – the object the camera is looking at and orbits around | '' |
+| distance | Number – the distance of the camera to the target | 1 |
 | enableRotate | Boolean – defines if the camera can be rotated | true |
 | rotateSpeed | Number – rotation speed | 1 |
 | enableZoom | Boolean – defines if the camera can be zoomed in or out | true |
@@ -21,14 +21,19 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 | autoRotate | Boolean – defines if the camera automatically rotates around the target | false |
 | autoRotateSpeed | Number – speed of the automatic rotation | 2 |
 | enableKeys | Boolean – defines if the keyboard can be used | true |
-| minAzimuthAngle | Number – minimum azimuth angle | -Infinity |
-| maxAzimuthAngle | Number – maximum azimuth angle | Infinity |
-| minPolarAngle | Number – minimum polar angle | 0 |
-| maxPolarAngle | Number – maximum polar angle | Math.PI |
-| minZoom | Number – minimum zoom value | 0 |
-| maxZoom | Number – maximum zoom value | Infinity |
-| minDistance | Number – minimum distance | 0 |
-| maxDistance | Number – maximum distance | Infinity |
+| minAzimuthAngle | Number – minimum azimuth angle – Defines how far you can orbit horizontally, lower limit | -Infinity |
+| maxAzimuthAngle | Number – maximum azimuth angle – Defines how far you can orbit horizontally, upper limit | Infinity |
+| minPolarAngle | Number – minimum polar angle – Defines how far you can orbit vertically, lower limit | 0 |
+| maxPolarAngle | Number – maximum polar angle – Defines how far you can orbit vertically, upper limit | Math.PI |
+| minZoom | Number – minimum zoom value – Defines how far you can zoom out for Orthographic Cameras | 0 |
+| maxZoom | Number – maximum zoom value – Defines how far you can zoom in for Orthographic Cameras | Infinity |
+| minDistance | Number – minimum distance – Defines how far you can zoom in for Perspective Cameras | 0 |
+| maxDistance | Number – maximum distance – Defines how far you can zoom out for Perspective Cameras | Infinity |
+
+
+### Events
+
+
 
 ### Installation
 
@@ -82,12 +87,12 @@ Install and use by directly including the [browser files](dist):
 Install via npm:
 
 ```bash
-npm install aframe-orbit-controls-component
+npm install aframe-orbit-controls-component-2
 ```
 
 Then register and use.
 
 ```js
 require('aframe');
-require('aframe-orbit-controls-component');
+require('aframe-orbit-controls-component-2');
 ```
