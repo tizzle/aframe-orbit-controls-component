@@ -1,4 +1,4 @@
-/* global AFRAME */
+/* global AFRAME THREE */
 
 if (typeof AFRAME === 'undefined') {
     throw new Error('Component attempted to register before AFRAME was available.');
@@ -78,6 +78,18 @@ AFRAME.registerComponent('orbit-controls', {
         maxDistance: {
             default: Infinity
         },
+        rotateTo: {
+            type: 'vec3',
+            default: '0 0 0'
+        },
+        rotateToSpeed: {
+            type: 'number',
+            default: 0.05
+        },
+        logPosition: {
+            type: 'boolean',
+            default: false
+        }
     },
 
     /**
@@ -104,7 +116,8 @@ AFRAME.registerComponent('orbit-controls', {
             PAN: 2,
             TOUCH_ROTATE: 3,
             TOUCH_DOLLY: 4,
-            TOUCH_PAN: 5
+            TOUCH_PAN: 5,
+            ROTATE_TO: 6
         };
 
         this.state = this.STATE.NONE;
@@ -133,6 +146,7 @@ AFRAME.registerComponent('orbit-controls', {
         this.dollyDelta = new THREE.Vector2();
 
         this.vector = new THREE.Vector3();
+        this.desiredPosition = new THREE.Vector3();
 
         this.mouseButtons = {
             ORBIT: THREE.MOUSE.LEFT,
@@ -156,6 +170,12 @@ AFRAME.registerComponent('orbit-controls', {
      */
     update: function(oldData) {
         console.log("component update");
+        var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z)
+        // Check if rotateToVec3 is already desiredPosition
+        if ( !this.desiredPosition.equals(rotateToVec3) ) {
+            this.desiredPosition.copy(rotateToVec3)
+            this.rotateTo(this.desiredPosition)
+        }
     },
 
     /**
@@ -171,6 +191,9 @@ AFRAME.registerComponent('orbit-controls', {
      */
     tick: function(t) {
         this.updateView();
+        if (this.data.logPosition === true && this.state === this.STATE.ROTATE) {
+            console.log(this.el.object3D.position)
+        }
     },
 
     /**
@@ -334,6 +357,8 @@ AFRAME.registerComponent('orbit-controls', {
         // console.log('onMouseUp');
 
         if (this.data.enabled === false) return;
+
+        if (this.state === this.STATE.ROTATE_TO) return;
 
         event.preventDefault();
         event.stopPropagation();
@@ -678,6 +703,12 @@ AFRAME.registerComponent('orbit-controls', {
         this.sphericalDelta.phi -= angle;
     },
 
+    rotateTo: function( vec3 ) {
+      if (this.data.logPosition) console.log('OrbitControls: current position', this.el.object3D.position);
+      this.state = this.STATE.ROTATE_TO;
+      this.desiredPosition.copy(vec3);
+  },
+
 
     panHorizontally: function(distance, objectMatrix) {
         // console.log('pan horizontally', distance, objectMatrix);
@@ -755,6 +786,14 @@ AFRAME.registerComponent('orbit-controls', {
     // UPDATE VIEW //
 
     updateView: function() {
+
+        if (this.desiredPosition && this.state === this.STATE.ROTATE_TO) {
+            var desiredSpherical = new THREE.Spherical
+            desiredSpherical.setFromVector3(this.desiredPosition)
+            var phiDiff = desiredSpherical.phi - this.spherical.phi
+            var thetaDiff = desiredSpherical.theta - this.spherical.theta
+            this.sphericalDelta.set(this.spherical.radius, phiDiff * this.data.rotateToSpeed, thetaDiff * this.data.rotateToSpeed)
+        }
 
         var offset = new THREE.Vector3();
 

@@ -29,6 +29,9 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 | maxZoom | Number – maximum zoom value – Defines how far you can zoom in for Orthographic Cameras | Infinity |
 | minDistance | Number – minimum distance – Defines how far you can zoom in for Perspective Cameras | 0 |
 | maxDistance | Number – maximum distance – Defines how far you can zoom out for Perspective Cameras | Infinity |
+| rotateTo | Vector3 – position to rotate automatically to | '0 0 0' |
+| rotateToSpeed | Number – rotateTo speed | 0.05 |
+| logPosition | Boolean – prints out camera position to console.log() when rotating | true |
 
 
 ### Events
