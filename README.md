@@ -7,7 +7,7 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 
 | Property   | Description | Default Value |
 | ---------- | ----------- | ------------- |
-| enabled | Boolean – defines if the Orbit Controls are used | false
+| enabled | Boolean – defines if the Orbit Controls are used | false |
 | target | String – the object the camera is looking at | '' |
 | distance | Number – the distnace of the camera to the target | 1 |
 | enableRotate | Boolean – defines if the camera can be rotated | true |
@@ -29,6 +29,8 @@ Might be useful in responsive applications, to allow desktop users to rotate the
 | maxZoom | Number – maximum zoom value | Infinity |
 | minDistance | Number – minimum distance | 0 |
 | maxDistance | Number – maximum distance | Infinity |
+| vrCamera | String - switch active camera to this one when entering VR mode | '' |
+
 
 ### Installation
 
@@ -39,7 +41,7 @@ Install and use by directly including the [browser files](dist):
 ```html
 <head>
   <title>A-Frame using a Camera with Orbit Controls</title>
-  <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
   <script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/master/dist/aframe-orbit-controls-component.min.js"></script>
 </head>
 
@@ -57,8 +59,20 @@ Install and use by directly including the [browser files](dist):
                 dampingFactor: 0.125;
                 rotateSpeed:0.25;
                 minDistance:3;
-                maxDistance:100;"
+                maxDistance:100;
+                vrCamera: #freelook_camera"
             mouse-cursor="">
+
+        <!-- Use alternative free-look camera in VR mode -->
+        <a-entity
+            id="freelook_camera"
+            camera
+            active="false"
+            position="0 0 5"
+            look-controls
+            mouse-cursor="">
+            
+        </a-entity>
             <a-light light="type: directional; color: #fff; intensity: 0.8;" position="-1 1 0"></a-light>
             <a-light light="type: point; color: #fff; intensity: 0.3;" position="0 5 0"></a-light>
         </a-entity>
