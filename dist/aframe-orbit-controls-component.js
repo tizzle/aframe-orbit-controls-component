@@ -215,7 +215,8 @@
 	     * Generally modifies the entity based on the data.
 	     */
 	    update: function(oldData) {
-	        console.log("component update");
+	        // console.log("component update");
+
 	        var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z)
 	        // Check if rotateToVec3 is already desiredPosition
 	        if ( !this.desiredPosition.equals(rotateToVec3) ) {
@@ -229,7 +230,7 @@
 	     * Generally undoes all modifications to the entity.
 	     */
 	    remove: function() {
-	        console.log("component remove");
+	        // console.log("component remove");
 	    },
 
 	    /**
@@ -237,7 +238,7 @@
 	     */
 	    tick: function(t) {
 	        this.updateView();
-	        if (this.data.logPosition === true && this.state === this.STATE.ROTATE) {
+	        if (this.data.logPosition === true) {
 	            console.log(this.el.object3D.position)
 	        }
 	    },
@@ -247,7 +248,7 @@
 	     * Use to stop or remove any dynamic or background behavior such as events.
 	     */
 	    pause: function() {
-	        console.log("component pause");
+	        // console.log("component pause");
 	        this.removeEventListeners();
 	    },
 
@@ -256,9 +257,7 @@
 	     * Use to continue or add any dynamic or background behavior such as events.
 	     */
 	    play: function() {
-
-	        console.log("object", this.object);
-	        console.log("dolly", this.dolly);
+	        // console.log("component play");
 
 	        var camera, cameraType;
 	        this.object.traverse(function(child) {
@@ -750,7 +749,6 @@
 	    },
 
 	    rotateTo: function( vec3 ) {
-	      if (this.data.logPosition) console.log('OrbitControls: current position', this.el.object3D.position);
 	      this.state = this.STATE.ROTATE_TO;
 	      this.desiredPosition.copy(vec3);
 	  },
