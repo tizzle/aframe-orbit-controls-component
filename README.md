@@ -1,7 +1,7 @@
 ## aframe-orbit-controls-component
 
 A (almost) direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
-Might be useful in responsive applications, to allow desktop users to rotate the camera around an object.
+It allows users to rotate the camera around an object. Might be useful as a fallback to VR mode.
 
 Have a look at the [examples](https://tizzle.github.io/aframe-orbit-controls-component/)
 
