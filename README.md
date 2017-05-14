@@ -3,6 +3,8 @@
 A (almost) direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
 Might be useful in responsive applications, to allow desktop users to rotate the camera around an object.
 
+Have a look at the [examples](https://tizzle.github.io/aframe-orbit-controls-component/)
+
 ### API
 
 | Property   | Description | Default Value |
