@@ -89,6 +89,10 @@ AFRAME.registerComponent('orbit-controls', {
     logPosition: {
       type: 'boolean',
       default: false
+    },
+    autoVRLookCam: {
+      type: 'boolean',
+      default: true
     }
   },
 
@@ -108,18 +112,19 @@ AFRAME.registerComponent('orbit-controls', {
 
     // Find the look-controls component on this camera, or create if it doesn't exist.
     this.lookControls = null;
-    if (this.el.components["look-controls"]) {
-      this.lookControls = this.el.components["look-controls"];
-    } else {
-      this.el.setAttribute('look-controls','');
-      this.lookControls = this.el.components["look-controls"];
+    if (this.data.autoVRLookCam) {
+      if (this.el.components["look-controls"]) {
+        this.lookControls = this.el.components["look-controls"];
+      } else {
+        this.el.setAttribute('look-controls','');
+        this.lookControls = this.el.components["look-controls"];
+      }
+      this.lookControls.pause();
+
+      // Attach listeners to pause myself on enter-vr and resume myself on exit-vr
+      this.el.sceneEl.addEventListener('enter-vr', this.handleEnterVR.bind(this));
+      this.el.sceneEl.addEventListener('exit-vr', this.handleExitVR.bind(this));
     }
-    this.lookControls.pause();
-
-
-    // Attach listeners to pause myself on enter-vr and resume myself on exit-vr
-    this.el.sceneEl.addEventListener('enter-vr', this.handleEnterVR.bind(this));
-    this.el.sceneEl.addEventListener('exit-vr', this.handleExitVR.bind(this));
 
 
     this.dolly = new THREE.Object3D();
