@@ -105,6 +105,23 @@ AFRAME.registerComponent('orbit-controls', {
     this.object = this.el.object3D;
     this.target = this.sceneEl.querySelector(this.data.target).object3D.position.clone();
 
+
+    // Find the look-controls component on this camera, or create if it doesn't exist.
+    this.lookControls = null;
+    if (this.el.components["look-controls"]) {
+      this.lookControls = this.el.components["look-controls"];
+    } else {
+      this.el.setAttribute('look-controls','');
+      this.lookControls = this.el.components["look-controls"];
+    }
+    this.lookControls.pause();
+
+
+    // Attach listeners to pause myself on enter-vr and resume myself on exit-vr
+    this.el.sceneEl.addEventListener('enter-vr', this.handleEnterVR.bind(this));
+    this.el.sceneEl.addEventListener('exit-vr', this.handleExitVR.bind(this));
+
+
     this.dolly = new THREE.Object3D();
     this.dolly.position.copy(this.object.position);
 
@@ -190,10 +207,40 @@ AFRAME.registerComponent('orbit-controls', {
    * Called on each scene tick.
    */
   tick: function (t) {
-    this.updateView();
+    if (this.data.enabled) this.updateView();
     if (this.data.logPosition === true) {
       console.log(this.el.object3D.position);
     }
+  },
+
+
+  handleEnterVR: function(e) {
+    this.pause();
+
+    // Sometimes the initial view in VR does not point towards 0,0,0. I am not sure how to change the intial orientation of VR mode.
+    // This is also confused because I don't totally understand how this orbit-controls updates the camera so I'm not sure how to remove
+    // the orbit-controls position&rotation so that we can start in VR mode with zero rotation
+    // As I understand it, the orbit-controls moves the camera around the object, updating the camera position with the orbit. This means if we orbit
+    // to the back of the object then enter VR, we are standing behind the object however the default view is still forwards, to sowe must turn our head
+    // 180' back to see the object. This isn't really user-friendly behaviour. So we should either add a transform matrix on top of the VR look-camera, or else
+    // transform the entire scene so it rotates such that it is visible along the Z axis. I'm not sure how to implement either of these :(
+    // -Dan moran (morandd) 5.18.2017
+
+    //this.el.setAttribute('rotation','0 0 0'); // The look-controls updates the positon and rotation attributes.
+    this.dolly.lookAt({x:0, y:0, z:0}); // I think the oribt-controsl updates the dolly object, I'm not sure how this is applied to the camera object.
+    this.lookControls.play();
+
+    if (this.data.autoRotate) console.warn('orbit-controls: Sorry, autoRotate is not implemented in VR mode');
+  },
+  handleExitVR: function(e){
+    this.data.enabled = true;
+    this.lookControls.pause();
+
+    // Resume the orientation we had before entering VR:
+    this.el.setAttribute('rotation','0 0 0'); // undo the rotations from VR mode
+    this.updateView();
+
+    this.play();
   },
 
   /**
@@ -203,6 +250,8 @@ AFRAME.registerComponent('orbit-controls', {
   pause: function () {
     // console.log("component pause");
     this.removeEventListeners();
+
+    this.data.enabled = false;
   },
 
   /**
@@ -211,6 +260,8 @@ AFRAME.registerComponent('orbit-controls', {
    */
   play: function () {
     // console.log("component play");
+
+    this.data.enabled = true;
 
     var camera, cameraType;
     this.object.traverse(function (child) {
