@@ -1,7 +1,7 @@
 ## aframe-orbit-controls-component
 
 A (almost) direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
-It allows users to rotate the camera around an object. Might be useful as a fallback to VR mode.
+It allows users to rotate the camera around an object. Might be useful as a fallback to VR mode. Automatically switches to look-controls in VR mode.
 
 Have a look at the [examples](https://tizzle.github.io/aframe-orbit-controls-component/)
 
@@ -34,7 +34,7 @@ Have a look at the [examples](https://tizzle.github.io/aframe-orbit-controls-com
 | rotateTo | Vector3 – position to rotate automatically to | '0 0 0' |
 | rotateToSpeed | Number – rotateTo speed | 0.05 |
 | logPosition | Boolean – prints out camera position to console.log() when rotating | true |
-
+| autoVRLookCam | Boolean - automatically switch over to look-controls in VR mode? | true |
 
 ### Installation
 
@@ -45,7 +45,7 @@ Install and use by directly including the [browser files](dist):
 ```html
 <head>
   <title>A-Frame using a Camera with Orbit Controls</title>
-  <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
   <script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/v0.1.6/dist/aframe-orbit-controls-component.min.js"></script>
 </head>
 
@@ -105,3 +105,9 @@ Then register and use.
 require('aframe');
 require('aframe-orbit-controls-component-2');
 ```
+
+Alternatively, include as a `<script>` tag:
+```
+<script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/v0.1.6/dist/aframe-orbit-controls-component.min.js"></script>
+```
+When the user enters VR mode, `orbit-controls` will pause itself and switch to the `look-controls` attached to the same camera. If no `look-controls` is specified on the current camera, one will be created with the default settings (this usually works fine). If you do not want this behaviour (probably becuase you want to control the camera juggling behaviour yourself) just specify `autoVRLookCam:false`.
