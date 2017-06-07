@@ -72,6 +72,9 @@ AFRAME.registerComponent('orbit-controls', {
     maxZoom: {
       default: Infinity
     },
+    invertZoom: {
+      default: false
+    },
     minDistance: {
       default: 0
     },
@@ -109,26 +112,25 @@ AFRAME.registerComponent('orbit-controls', {
     this.object = this.el.object3D;
     this.target = this.sceneEl.querySelector(this.data.target).object3D.position.clone();
 
-
     // Find the look-controls component on this camera, or create if it doesn't exist.
     this.lookControls = null;
+
     if (this.data.autoVRLookCam) {
-      if (this.el.components["look-controls"]) {
-        this.lookControls = this.el.components["look-controls"];
+      if (this.el.components['look-controls']) {
+        this.lookControls = this.el.components['look-controls'];
       } else {
-        this.el.setAttribute('look-controls','');
-        this.lookControls = this.el.components["look-controls"];
+        this.el.setAttribute('look-controls', '');
+        this.lookControls = this.el.components['look-controls'];
       }
       this.lookControls.pause();
-
-      // Attach listeners to pause myself on enter-vr and resume myself on exit-vr
-      this.el.sceneEl.addEventListener('enter-vr', this.handleEnterVR.bind(this));
-      this.el.sceneEl.addEventListener('exit-vr', this.handleExitVR.bind(this));
+      this.el.sceneEl.addEventListener('enter-vr', this.onEnterVR.bind(this), false);
+      this.el.sceneEl.addEventListener('exit-vr', this.onExitVR.bind(this), false);
     }
-
 
     this.dolly = new THREE.Object3D();
     this.dolly.position.copy(this.object.position);
+
+    this.savedPose = null;
 
     this.STATE = {
       NONE: -1,
@@ -190,14 +192,19 @@ AFRAME.registerComponent('orbit-controls', {
    * Generally modifies the entity based on the data.
    */
   update: function (oldData) {
-    // console.log("component update");
+    // console.log('component update');
 
-    var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
-    // Check if rotateToVec3 is already desiredPosition
-    if (!this.desiredPosition.equals(rotateToVec3)) {
-      this.desiredPosition.copy(rotateToVec3);
-      this.rotateTo(this.desiredPosition);
+    if (this.data.rotateTo) {
+      var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
+      // Check if rotateToVec3 is already desiredPosition
+      if (!this.desiredPosition.equals(rotateToVec3)) {
+        this.desiredPosition.copy(rotateToVec3);
+        this.rotateTo(this.desiredPosition);
+      }
     }
+
+    this.dolly.position.copy(this.object.position);
+    this.updateView(true);
   },
 
   /**
@@ -206,46 +213,48 @@ AFRAME.registerComponent('orbit-controls', {
    */
   remove: function () {
     // console.log("component remove");
+    this.removeEventListeners();
+    this.el.sceneEl.removeEventListener('enter-vr', this.onEnterVR, false);
+    this.el.sceneEl.removeEventListener('exit-vr', this.onExitVR, false);
   },
 
   /**
    * Called on each scene tick.
    */
   tick: function (t) {
-    if (this.data.enabled) this.updateView();
-    if (this.data.logPosition === true) {
+    var render = this.data.enabled ? this.updateView() : false;
+    if (render === true && this.data.logPosition === true) {
       console.log(this.el.object3D.position);
     }
   },
 
+  /*
+   * Called when entering VR mode
+  */
+  onEnterVR: function (event) {
+    // console.log('enter vr', this);
 
-  handleEnterVR: function(e) {
+    this.saveCameraPose();
+
+    this.el.setAttribute('position', {x: 0, y: 2, z: 5});
+    this.el.setAttribute('rotation', {x: 0, y: 0, z: 0});
+
     this.pause();
-
-    // Sometimes the initial view in VR does not point towards 0,0,0. I am not sure how to change the intial orientation of VR mode.
-    // This is also confused because I don't totally understand how this orbit-controls updates the camera so I'm not sure how to remove
-    // the orbit-controls position&rotation so that we can start in VR mode with zero rotation
-    // As I understand it, the orbit-controls moves the camera around the object, updating the camera position with the orbit. This means if we orbit
-    // to the back of the object then enter VR, we are standing behind the object however the default view is still forwards, to sowe must turn our head
-    // 180' back to see the object. This isn't really user-friendly behaviour. So we should either add a transform matrix on top of the VR look-camera, or else
-    // transform the entire scene so it rotates such that it is visible along the Z axis. I'm not sure how to implement either of these :(
-    // -Dan moran (morandd) 5.18.2017
-
-    //this.el.setAttribute('rotation','0 0 0'); // The look-controls updates the positon and rotation attributes.
-    this.dolly.lookAt({x:0, y:0, z:0}); // I think the oribt-controsl updates the dolly object, I'm not sure how this is applied to the camera object.
     this.lookControls.play();
-
     if (this.data.autoRotate) console.warn('orbit-controls: Sorry, autoRotate is not implemented in VR mode');
   },
-  handleExitVR: function(e){
-    this.data.enabled = true;
+
+  /*
+   * Called when exiting VR mode
+  */
+  onExitVR: function (event) {
+    // console.log('exit vr');
+
     this.lookControls.pause();
-
-    // Resume the orientation we had before entering VR:
-    this.el.setAttribute('rotation','0 0 0'); // undo the rotations from VR mode
-    this.updateView();
-
     this.play();
+
+    this.restoreCameraPose();
+    this.updateView(true);
   },
 
   /**
@@ -254,9 +263,8 @@ AFRAME.registerComponent('orbit-controls', {
    */
   pause: function () {
     // console.log("component pause");
-    this.removeEventListeners();
-
     this.data.enabled = false;
+    this.removeEventListeners();
   },
 
   /**
@@ -265,7 +273,6 @@ AFRAME.registerComponent('orbit-controls', {
    */
   play: function () {
     // console.log("component play");
-
     this.data.enabled = true;
 
     var camera, cameraType;
@@ -282,17 +289,28 @@ AFRAME.registerComponent('orbit-controls', {
     this.camera = camera;
     this.cameraType = cameraType;
 
-    this.sceneEl.addEventListener('render-target-loaded', this.handleRenderTargetLoaded.bind(this));
+    this.sceneEl.addEventListener('render-target-loaded', this.onRenderTargetLoaded, false);
 
+    if (this.lookControls) this.lookControls.pause();
     if (this.canvasEl) this.addEventListeners();
   },
 
-  handleRenderTargetLoaded: function () {
+  /*
+   * Called when Render Target is completely loaded
+   * Then set canvasEl and add event listeners
+   */
+  onRenderTargetLoaded: function () {
+    this.sceneEl.removeEventListener('render-target-loaded', this.onRenderTargetLoaded, false);
     this.canvasEl = this.sceneEl.canvas;
     this.addEventListeners();
   },
 
+  /*
+   * Bind this to all event handlera
+   */
   bindMethods: function () {
+    this.onRenderTargetLoaded = this.onRenderTargetLoaded.bind(this);
+
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseWheel = this.onMouseWheel.bind(this);
@@ -304,6 +322,9 @@ AFRAME.registerComponent('orbit-controls', {
     this.onKeyDown = this.onKeyDown.bind(this);
   },
 
+  /*
+   * Add event listeners
+   */
   addEventListeners: function () {
     this.canvasEl.addEventListener('contextmenu', this.onContextMenu, false);
 
@@ -318,6 +339,9 @@ AFRAME.registerComponent('orbit-controls', {
     window.addEventListener('keydown', this.onKeyDown, false);
   },
 
+  /*
+   * Remove event listeners
+   */
   removeEventListeners: function () {
     this.canvasEl.removeEventListener('contextmenu', this.onContextMenu, false);
     this.canvasEl.removeEventListener('mousedown', this.onMouseDown, false);
@@ -335,15 +359,21 @@ AFRAME.registerComponent('orbit-controls', {
     window.removeEventListener('keydown', this.onKeyDown, false);
   },
 
-  // EVENT LISTENERS //
+  /*
+   * EVENT LISTENERS
+   */
 
-  // CONTEXT MENU
+  /*
+   * Called when right clicking the A-Frame component
+   */
 
   onContextMenu: function (event) {
     event.preventDefault();
   },
 
-  // MOUSE
+  /*
+   * MOUSE CLICK EVENT LISTENERS
+   */
 
   onMouseDown: function (event) {
     // console.log('onMouseDown');
@@ -419,7 +449,9 @@ AFRAME.registerComponent('orbit-controls', {
     this.el.emit('end-drag-orbit-controls', null, false);
   },
 
-  // MOUSE WHEEL
+  /*
+   * MOUSE WHEEL EVENT LISTENERS
+   */
 
   onMouseWheel: function (event) {
     // console.log('onMouseWheel');
@@ -430,7 +462,9 @@ AFRAME.registerComponent('orbit-controls', {
     this.handleMouseWheel(event);
   },
 
-  // TOUCH
+  /*
+   * TOUCH EVENT LISTENERS
+   */
 
   onTouchStart: function (event) {
     // console.log('onTouchStart');
@@ -506,7 +540,9 @@ AFRAME.registerComponent('orbit-controls', {
     this.state = this.STATE.NONE;
   },
 
-  // KEYBOARD
+  /*
+   * KEYBOARD EVENT LISTENERS
+   */
 
   onKeyDown: function (event) {
     // console.log('onKeyDown');
@@ -516,9 +552,13 @@ AFRAME.registerComponent('orbit-controls', {
     this.handleKeyDown(event);
   },
 
-  // EVENT HANDLERS //
+  /*
+   * EVENT HANDLERS
+   */
 
-  // MOUSE
+  /*
+   * MOUSE CLICK EVENT HANDLERS
+   */
 
   handleMouseDownRotate: function (event) {
     // console.log( 'handleMouseDownRotate' );
@@ -561,9 +601,9 @@ AFRAME.registerComponent('orbit-controls', {
     this.dollyDelta.subVectors(this.dollyEnd, this.dollyStart);
 
     if (this.dollyDelta.y > 0) {
-      this.dollyIn(this.getZoomScale());
+      !this.data.invertZoom ? this.dollyIn(this.getZoomScale()) : this.dollyOut(this.getZoomScale());
     } else if (this.dollyDelta.y < 0) {
-      this.dollyOut(this.getZoomScale());
+      !this.data.invertZoom ? this.dollyOut(this.getZoomScale()) : this.dollyIn(this.getZoomScale());
     }
 
     this.dollyStart.copy(this.dollyEnd);
@@ -586,7 +626,9 @@ AFRAME.registerComponent('orbit-controls', {
     // console.log( 'handleMouseUp' );
   },
 
-  // MOUSE WHEEL
+  /*
+   * MOUSE WHEEL EVENT HANDLERS
+   */
 
   handleMouseWheel: function (event) {
     // console.log( 'handleMouseWheel' );
@@ -601,15 +643,17 @@ AFRAME.registerComponent('orbit-controls', {
     }
 
     if (delta > 0) {
-      this.dollyOut(this.getZoomScale());
+      !this.data.invertZoom ? this.dollyOut(this.getZoomScale()) : this.dollyIn(this.getZoomScale());
     } else if (delta < 0) {
-      this.dollyIn(this.getZoomScale());
+      !this.data.invertZoom ? this.dollyIn(this.getZoomScale()) : this.dollyOut(this.getZoomScale());
     }
 
     this.updateView();
   },
 
-  // TOUCH
+  /*
+   * TOUCH EVENT HANDLERS
+   */
 
   handleTouchStartRotate: function (event) {
     // console.log( 'handleTouchStartRotate' );
@@ -681,7 +725,9 @@ AFRAME.registerComponent('orbit-controls', {
     // console.log( 'handleTouchEnd' );
   },
 
-  // KEYBOARD
+  /*
+   * KEYBOARD EVENT HANDLERS
+   */
 
   handleKeyDown: function (event) {
     // console.log( 'handleKeyDown' );
@@ -706,7 +752,9 @@ AFRAME.registerComponent('orbit-controls', {
     }
   },
 
-  // HELPER FUNCTIONS //
+  /*
+   * HELPER FUNCTIONS
+   */
 
   getAutoRotationAngle: function () {
     return 2 * Math.PI / 60 / 60 * this.data.autoRotateSpeed;
@@ -756,12 +804,12 @@ AFRAME.registerComponent('orbit-controls', {
       offset.copy(position).sub(this.target);
       var targetDistance = offset.length();
       targetDistance *= Math.tan((this.camera.fov / 2) * Math.PI / 180.0); // half of the fov is center to top of screen
-      this.panHorizontally(2 * deltaX * targetDistance / canvas.clientHeight, this.dolly.matrix); // we actually don't use screenWidth, since perspective camera is fixed to screen height
-      this.panVertically(2 * deltaY * targetDistance / canvas.clientHeight, this.dolly.matrix);
+      this.panHorizontally(2 * deltaX * targetDistance / canvas.clientHeight, this.object.matrix); // we actually don't use screenWidth, since perspective camera is fixed to screen height
+      this.panVertically(2 * deltaY * targetDistance / canvas.clientHeight, this.object.matrix);
     } else if (this.cameraType === 'OrthographicCamera') {
       // orthographic
-      this.panHorizontally(deltaX * (this.dolly.right - this.dolly.left) / this.camera.zoom / canvas.clientWidth, this.dolly.matrix);
-      this.panVertically(deltaY * (this.dolly.top - this.dolly.bottom) / this.camera.zoom / canvas.clientHeight, this.dolly.matrix);
+      this.panHorizontally(deltaX * (this.dolly.right - this.dolly.left) / this.camera.zoom / canvas.clientWidth, this.object.matrix);
+      this.panVertically(deltaY * (this.dolly.top - this.dolly.bottom) / this.camera.zoom / canvas.clientHeight, this.object.matrix);
     } else {
       // camera neither orthographic nor perspective
       console.warn('Trying to pan: WARNING: Orbit Controls encountered an unknown camera type - pan disabled.');
@@ -797,9 +845,40 @@ AFRAME.registerComponent('orbit-controls', {
     }
   },
 
-  // UPDATE VIEW //
+  lookAtTarget: function (object, target) {
+    var v = new THREE.Vector3();
+    v.subVectors(object.position, target).add(object.position);
+    object.lookAt(v);
+  },
 
-  updateView: function () {
+  /*
+   * SAVES CAMERA POSE (WHEN ENTERING VR)
+   */
+
+  saveCameraPose: function () {
+    if (this.savedPose) { return; }
+    this.savedPose = {
+      position: this.dolly.position,
+      rotation: this.dolly.rotation
+    };
+  },
+
+  /*
+   * RESTORE CAMERA POSE (WHEN EXITING VR)
+   */
+
+  restoreCameraPose: function () {
+    if (!this.savedPose) { return; }
+    this.dolly.position.copy(this.savedPose.position);
+    this.dolly.rotation.copy(this.savedPose.rotation);
+    this.savedPose = null;
+  },
+
+  /*
+   * VIEW UPDATE
+   */
+
+  updateView: function (forceUpdate) {
     if (this.desiredPosition && this.state === this.STATE.ROTATE_TO) {
       var desiredSpherical = new THREE.Spherical();
       desiredSpherical.setFromVector3(this.desiredPosition);
@@ -821,11 +900,11 @@ AFRAME.registerComponent('orbit-controls', {
 
     this.spherical.theta += this.sphericalDelta.theta;
     this.spherical.phi += this.sphericalDelta.phi;
-    this.spherical.theta = Math.max(this.data.minAzimuthAngle, Math.min(this.data.maxAzimuthAngle, this.spherical.theta)); // restrict theta to be between desired limits
-    this.spherical.phi = Math.max(this.data.minPolarAngle, Math.min(this.data.maxPolarAngle, this.spherical.phi)); // restrict phi to be between desired limits
+    this.spherical.theta = Math.max(this.data.minAzimuthAngle, Math.min(this.data.maxAzimuthAngle, this.spherical.theta)); // restrict theta to be inside desired limits
+    this.spherical.phi = Math.max(this.data.minPolarAngle, Math.min(this.data.maxPolarAngle, this.spherical.phi)); // restrict phi to be inside desired limits
     this.spherical.makeSafe();
     this.spherical.radius *= this.scale;
-    this.spherical.radius = Math.max(this.data.minDistance, Math.min(this.data.maxDistance, this.spherical.radius)); // restrict radius to be between desired limits
+    this.spherical.radius = Math.max(this.data.minDistance, Math.min(this.data.maxDistance, this.spherical.radius)); // restrict radius to be inside desired limits
 
     this.target.add(this.panOffset); // move target to panned location
 
@@ -852,7 +931,8 @@ AFRAME.registerComponent('orbit-controls', {
     // min(camera displacement, camera rotation in radians)^2 > EPS
     // using small-angle approximation cos(x/2) = 1 - x^2 / 8
 
-    if (this.zoomChanged ||
+    if (forceUpdate === true ||
+      this.zoomChanged ||
       this.lastPosition.distanceToSquared(this.dolly.position) > this.EPS ||
       8 * (1 - this.lastQuaternion.dot(this.dolly.quaternion)) > this.EPS) {
       // this.el.emit('change-drag-orbit-controls', null, false);
@@ -884,12 +964,6 @@ AFRAME.registerComponent('orbit-controls', {
     return false;
   },
 
-  lookAtTarget: function (object, target) {
-    var v = new THREE.Vector3();
-    v.subVectors(object.position, target).add(object.position);
-    object.lookAt(v);
-  },
-
   calculateHMDQuaternion: (function () {
     var hmdQuaternion = new THREE.Quaternion();
     return function () {
@@ -897,4 +971,5 @@ AFRAME.registerComponent('orbit-controls', {
       return hmdQuaternion;
     };
   })()
+
 });

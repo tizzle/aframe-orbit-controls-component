@@ -15,6 +15,7 @@ Have a look at the [examples](https://tizzle.github.io/aframe-orbit-controls-com
 | enableRotate | Boolean – defines if the camera can be rotated | true |
 | rotateSpeed | Number – rotation speed | 1 |
 | enableZoom | Boolean – defines if the camera can be zoomed in or out | true |
+| invertZoom | Boolean – defines if zooming is inverted | false |
 | zoomSpeed | Number – zoom speed | 1 |
 | enablePan | Boolean – defines if the camera can be panned (using the arrow keys) | true |
 | keyPanSpeed | Number – panning speed | 7 |
