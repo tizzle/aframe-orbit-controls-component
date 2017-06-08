@@ -109,6 +109,6 @@ require('aframe-orbit-controls-component-2');
 
 Alternatively, include as a `<script>` tag:
 ```
-<script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/v0.1.6/dist/aframe-orbit-controls-component.min.js"></script>
+<script src="https://cdn.rawgit.com/tizzle/aframe-orbit-controls-component/v0.1.7/dist/aframe-orbit-controls-component.min.js"></script>
 ```
 When the user enters VR mode, `orbit-controls` will pause itself and switch to the `look-controls` attached to the same camera. If no `look-controls` is specified on the current camera, one will be created with the default settings (this usually works fine). If you do not want this behaviour (probably becuase you want to control the camera juggling behaviour yourself) just specify `autoVRLookCam:false`.
