@@ -110,7 +110,9 @@ AFRAME.registerComponent('orbit-controls', {
   init: function () {
     this.sceneEl = this.el.sceneEl;
     this.object = this.el.object3D;
-    this.target = this.sceneEl.querySelector(this.data.target).object3D.position.clone();
+
+    // console.log( this.sceneEl.querySelector(this.data.target).object3D );
+    this.target = this.sceneEl.querySelector(this.data.target).object3D;
 
     // Find the look-controls component on this camera, or create if it doesn't exist.
     this.lookControls = null;
@@ -191,8 +193,8 @@ AFRAME.registerComponent('orbit-controls', {
    * Called when component is attached and when component data changes.
    * Generally modifies the entity based on the data.
    */
-  update: function (oldData) {
-    // console.log('component update');
+  update: function () {
+    console.log('component update', this.data.enabled );
 
     if (this.data.rotateTo) {
       var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
@@ -203,7 +205,15 @@ AFRAME.registerComponent('orbit-controls', {
       }
     }
 
-    this.dolly.position.copy(this.object.position);
+    if(this.dolly.position !== this.object.position) {
+      console.log('position was changed');
+      this.dolly.position.copy(this.object.position);
+    }
+    if(this.target !== this.sceneEl.querySelector(this.data.target).object3D) {
+      console.log('target was changed');
+      this.target = this.sceneEl.querySelector(this.data.target).object3D;
+    }
+
     this.updateView(true);
   },
 
@@ -801,7 +811,7 @@ AFRAME.registerComponent('orbit-controls', {
     if (this.cameraType === 'PerspectiveCamera') {
       // perspective
       var position = this.dolly.position;
-      offset.copy(position).sub(this.target);
+      offset.copy(position).sub(this.target.position);
       var targetDistance = offset.length();
       targetDistance *= Math.tan((this.camera.fov / 2) * Math.PI / 180.0); // half of the fov is center to top of screen
       this.panHorizontally(2 * deltaX * targetDistance / canvas.clientHeight, this.object.matrix); // we actually don't use screenWidth, since perspective camera is fixed to screen height
@@ -892,7 +902,7 @@ AFRAME.registerComponent('orbit-controls', {
     var quat = new THREE.Quaternion().setFromUnitVectors(this.dolly.up, new THREE.Vector3(0, 1, 0)); // so camera.up is the orbit axis
     var quatInverse = quat.clone().inverse();
 
-    offset.copy(this.dolly.position).sub(this.target);
+    offset.copy(this.dolly.position).sub(this.target.position);
     offset.applyQuaternion(quat); // rotate offset to "y-axis-is-up" space
     this.spherical.setFromVector3(offset); // angle from z-axis around y-axis
 
@@ -906,15 +916,15 @@ AFRAME.registerComponent('orbit-controls', {
     this.spherical.radius *= this.scale;
     this.spherical.radius = Math.max(this.data.minDistance, Math.min(this.data.maxDistance, this.spherical.radius)); // restrict radius to be inside desired limits
 
-    this.target.add(this.panOffset); // move target to panned location
+    this.target.position.add(this.panOffset); // move target to panned location
 
     offset.setFromSpherical(this.spherical);
     offset.applyQuaternion(quatInverse); // rotate offset back to "camera-up-vector-is-up" space
 
-    this.dolly.position.copy(this.target).add(offset);
+    this.dolly.position.copy(this.target.position).add(offset);
 
-    if (this.target) {
-      this.lookAtTarget(this.dolly, this.target);
+    if (this.target.position) {
+      this.lookAtTarget(this.dolly, this.target.position);
     }
 
     if (this.data.enableDamping === true) {

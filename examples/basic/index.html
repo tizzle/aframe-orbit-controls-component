@@ -14,9 +14,10 @@
         camera="fov: 80; zoom: 1;"
         position="0 2 5"
         orbit-controls="
+          enabled: false;
           invertZoom: true;
           autoRotate: false;
-          target: #target;
+          target: #target-00;
           enableDamping: true;
           dampingFactor: 0.125;
           rotateSpeed:0.25;
@@ -28,15 +29,30 @@
 				<a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".33 1 .33" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
 			</a-entity>
 
-			<a-entity id="camera2" camera position="5 3 5" rotation="-25 45 0">
+			<a-entity id="camera2" camera position="10 6 10" rotation="-25 45 0">
 			</a-entity>
 
-			<a-entity id="target">
-				<a-box id="box" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
-				<a-sphere id="sphere" position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
-				<a-cylinder id="cylinder" position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-				<a-plane position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      <a-entity id="target-00" position="0 0 0">
 			</a-entity>
+
+			<a-entity
+        id="target-01"
+        position="0 -14 0"
+        opacity="0"
+      >
+				<a-box id="target-02" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
+				<a-sphere id="target-03" position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
+				<a-cylinder id="target-04" position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+				<a-plane id="target-05" position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+        <a-animation
+          duration="2000"
+          delay="500"
+          attribute="position"
+          to="0 0 0"
+        >
+        </a-animation>
+			</a-entity>
+
 			<a-sky color="#ECECEC"></a-sky>
 
 		</a-scene>
@@ -44,6 +60,7 @@
 
 	<div style="position:absolute; top:0; left:0; padding:12px;">
 		<button id="changeCamera">Change Camera</button>
+		<button id="changeTarget">Change Target</button>
 	</div>
 
 	<script>
@@ -60,16 +77,18 @@
 
       // IF YOU NEED TO CHANGE ATTRIBUTES OF THE CAMERA, I RECOMMEND DISABLING BEFORE DOING IT.
       // THIS WAY THE NEW ATTRIBUTES WILL BE PASSED TO THE ORBIT-CONTROLS VIA UPDATE()
-      document.querySelector('#camera').setAttribute( 'orbit-controls', 'enabled', false);
-      document.querySelector('#camera').setAttribute( 'position', '0 2 10');
-      document.querySelector('#camera').setAttribute( 'orbit-controls', 'enabled', true);
+      var cam = document.querySelector('#camera');
+      cam.setAttribute( 'orbit-controls', 'enabled', false);
+      cam.setAttribute( 'position', '0 2 6');
+      cam.setAttribute( 'orbit-controls', 'enabled', true);
 
 			// ORBIT CAMERA DRAG START / END EVENT LISTENERS
-			document.querySelector('#camera').addEventListener('start-drag-orbit-controls', handleDragStart);
-			document.querySelector('#camera').addEventListener('end-drag-orbit-controls', handleDragEnd);
+			cam.addEventListener('start-drag-orbit-controls', handleDragStart);
+			cam.addEventListener('end-drag-orbit-controls', handleDragEnd);
 
 			// TOGGLE ORBIT AND STATIC CAMERA
-			document.querySelector('#changeCamera').addEventListener('click', handleSwitchCamera);
+			document.querySelector('#changeCamera').addEventListener('click', handleCameraChange);
+			document.querySelector('#changeTarget').addEventListener('click', handleTargetChange);
 		}
 
 		function handleDragStart(event) {
@@ -84,12 +103,30 @@
 			// console.log(cam1.getAttribute('rotation'));
 		}
 
-		function handleSwitchCamera(event) {
+		function handleCameraChange(event) {
 			var cam1 = document.querySelector('#camera');
 			var cam2 = document.querySelector('#camera2');
 
 			if (cam1.components.camera.data.active) cam2.setAttribute('camera', 'active', true);
 			else cam1.setAttribute('camera', 'active', true);
+		}
+
+    var targets = [
+      "#target-00",
+      "#target-01",
+      "#target-02",
+      "#target-03",
+      "#target-04",
+      "#target-05",
+    ];
+
+    var currentTarget = 0;
+
+    function handleTargetChange(event) {
+			var cam = document.querySelector('#camera');
+      currentTarget = (currentTarget+1) >= targets.length ? 0 : (currentTarget+1);
+      console.log("change target to", targets[currentTarget]);
+			cam.setAttribute('orbit-controls', 'target', targets[currentTarget]);
 		}
 	</script>
 
