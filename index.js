@@ -112,7 +112,12 @@ AFRAME.registerComponent('orbit-controls', {
     this.object = this.el.object3D;
 
     // console.log( this.sceneEl.querySelector(this.data.target).object3D );
-    this.target = this.sceneEl.querySelector(this.data.target).object3D;
+    var targetElement = this.sceneEl.querySelector(this.data.target);
+    if (targetElement) {
+      this.target = this.sceneEl.querySelector(this.data.target).object3D;
+    } else {
+      console.warn('orbit-controls: You have not specified a valid target.');
+    }
 
     // Find the look-controls component on this camera, or create if it doesn't exist.
     this.lookControls = null;
@@ -194,7 +199,7 @@ AFRAME.registerComponent('orbit-controls', {
    * Generally modifies the entity based on the data.
    */
   update: function () {
-    console.log('component update', this.data.enabled );
+    // console.log('component update', this.data.enabled );
 
     if (this.data.rotateTo) {
       var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
@@ -209,12 +214,15 @@ AFRAME.registerComponent('orbit-controls', {
       console.log('position was changed');
       this.dolly.position.copy(this.object.position);
     }
-    if(this.target !== this.sceneEl.querySelector(this.data.target).object3D) {
-      console.log('target was changed');
-      this.target = this.sceneEl.querySelector(this.data.target).object3D;
+
+    var targetElement = this.sceneEl.querySelector(this.data.target);
+    if (targetElement && this.target !== targetElement.object3D) {
+      this.target = targetElement.object3D;
+    } else {
+      console.warn('orbit-controls: You have not specified a valid target.');
     }
 
-    this.updateView(true);
+    if (this.data.enabled && this.target) this.updateView(true);
   },
 
   /**
@@ -232,7 +240,7 @@ AFRAME.registerComponent('orbit-controls', {
    * Called on each scene tick.
    */
   tick: function (t) {
-    var render = this.data.enabled ? this.updateView() : false;
+    var render = this.data.enabled && this.target ? this.updateView() : false;
     if (render === true && this.data.logPosition === true) {
       console.log(this.el.object3D.position);
     }
@@ -264,7 +272,7 @@ AFRAME.registerComponent('orbit-controls', {
     this.play();
 
     this.restoreCameraPose();
-    this.updateView(true);
+    if (this.data.enabled && this.target) this.updateView(true);
   },
 
   /**
@@ -542,11 +550,8 @@ AFRAME.registerComponent('orbit-controls', {
     // console.log('onTouchEnd');
 
     if (this.data.enabled === false) return;
-
     this.handleTouchEnd(event);
-
     this.el.emit('end-drag-orbit-controls', null, false);
-
     this.state = this.STATE.NONE;
   },
 
@@ -558,7 +563,6 @@ AFRAME.registerComponent('orbit-controls', {
     // console.log('onKeyDown');
 
     if (this.data.enabled === false || this.data.enableKeys === false || this.data.enablePan === false) return;
-
     this.handleKeyDown(event);
   },
 
@@ -600,8 +604,6 @@ AFRAME.registerComponent('orbit-controls', {
     this.rotateUp(2 * Math.PI * this.rotateDelta.y / canvas.clientHeight * this.data.rotateSpeed);
 
     this.rotateStart.copy(this.rotateEnd);
-
-    this.updateView();
   },
 
   handleMouseMoveDolly: function (event) {
@@ -617,8 +619,6 @@ AFRAME.registerComponent('orbit-controls', {
     }
 
     this.dollyStart.copy(this.dollyEnd);
-
-    this.updateView();
   },
 
   handleMouseMovePan: function (event) {
@@ -628,8 +628,6 @@ AFRAME.registerComponent('orbit-controls', {
     this.panDelta.subVectors(this.panEnd, this.panStart);
     this.pan(this.panDelta.x, this.panDelta.y);
     this.panStart.copy(this.panEnd);
-
-    this.updateView();
   },
 
   handleMouseUp: function (event) {
@@ -657,8 +655,6 @@ AFRAME.registerComponent('orbit-controls', {
     } else if (delta < 0) {
       !this.data.invertZoom ? this.dollyIn(this.getZoomScale()) : this.dollyOut(this.getZoomScale());
     }
-
-    this.updateView();
   },
 
   /*
@@ -698,7 +694,6 @@ AFRAME.registerComponent('orbit-controls', {
     // rotating up and down along whole screen attempts to go 360, but limited to 180
     this.rotateUp(2 * Math.PI * this.rotateDelta.y / canvas.clientHeight * this.data.rotateSpeed);
     this.rotateStart.copy(this.rotateEnd);
-    this.updateView();
   },
 
   handleTouchMoveDolly: function (event) {
@@ -718,7 +713,6 @@ AFRAME.registerComponent('orbit-controls', {
     }
 
     this.dollyStart.copy(this.dollyEnd);
-    this.updateView();
   },
 
   handleTouchMovePan: function (event) {
@@ -728,7 +722,6 @@ AFRAME.registerComponent('orbit-controls', {
     this.panDelta.subVectors(this.panEnd, this.panStart);
     this.pan(this.panDelta.x, this.panDelta.y);
     this.panStart.copy(this.panEnd);
-    this.updateView();
   },
 
   handleTouchEnd: function (event) {
@@ -745,19 +738,15 @@ AFRAME.registerComponent('orbit-controls', {
     switch (event.keyCode) {
       case this.keys.UP:
         this.pan(0, this.data.keyPanSpeed);
-        this.updateView();
         break;
       case this.keys.BOTTOM:
         this.pan(0, -this.data.keyPanSpeed);
-        this.updateView();
         break;
       case this.keys.LEFT:
         this.pan(this.data.keyPanSpeed, 0);
-        this.updateView();
         break;
       case this.keys.RIGHT:
         this.pan(-this.data.keyPanSpeed, 0);
-        this.updateView();
         break;
     }
   },

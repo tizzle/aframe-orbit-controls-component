@@ -3,9 +3,14 @@
 <head>
 	<title>A-Frame Example Component - Basic</title>
 	<script src="../build.js"></script>
+  <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script>
 </head>
 
 <body>
+	<div style="position:absolute; top:0; left:0; padding:12px;">
+		<button id="changeCamera">Change Camera</button>
+		<button id="changeTarget">Change Target</button>
+	</div>
 	<div id="aframe">
 		<a-scene id="a-scene">
 
@@ -17,33 +22,40 @@
           enabled: false;
           invertZoom: true;
           autoRotate: false;
-          target: #target-00;
+          target: #target;
           enableDamping: true;
           dampingFactor: 0.125;
           rotateSpeed:0.25;
           minDistance:3;
           maxDistance:100;
-        "
-        mouse-cursor=""
+          "
+        mouse-cursor
       >
-				<a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".33 1 .33" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
+        <a-cursor fuse="true" color="yellow"></a-cursor>
+        <a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".33 1 .33" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
 			</a-entity>
 
 			<a-entity id="camera2" camera position="10 6 10" rotation="-25 45 0">
 			</a-entity>
 
-      <a-entity id="target-00" position="0 0 0">
+      <a-entity id="target" position="0 0 0">
 			</a-entity>
 
 			<a-entity
-        id="target-01"
+        id="group"
         position="0 -14 0"
         opacity="0"
       >
-				<a-box id="target-02" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
-				<a-sphere id="target-03" position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
-				<a-cylinder id="target-04" position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-				<a-plane id="target-05" position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+				<a-box id="cube" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
+				<a-sphere id="sphere" position="0 1.25 -1" radius="1.25" color="#EF2D5E">
+        </a-sphere>
+				<a-cylinder id="cylinder" position="1 0.75 1" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+				<a-plane id="plane" position="0 0 0" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"
+          event-set__enter="_event: mouseenter; material.color: yellowgreen; scale: 3 1 1"
+          event-set__leave="_event: mouseleave; material.color: skyblue; scale: 1 1 1"
+        >
+          <a-animation attribute="rotation" begin="click" dur="500" fill="backwards" to="-90 360 0"></a-animation>
+        </a-plane>
         <a-animation
           duration="2000"
           delay="500"
@@ -56,11 +68,6 @@
 			<a-sky color="#ECECEC"></a-sky>
 
 		</a-scene>
-	</div>
-
-	<div style="position:absolute; top:0; left:0; padding:12px;">
-		<button id="changeCamera">Change Camera</button>
-		<button id="changeTarget">Change Target</button>
 	</div>
 
 	<script>
@@ -77,30 +84,29 @@
 
       // IF YOU NEED TO CHANGE ATTRIBUTES OF THE CAMERA, I RECOMMEND DISABLING BEFORE DOING IT.
       // THIS WAY THE NEW ATTRIBUTES WILL BE PASSED TO THE ORBIT-CONTROLS VIA UPDATE()
-      var cam = document.querySelector('#camera');
-      cam.setAttribute( 'orbit-controls', 'enabled', false);
-      cam.setAttribute( 'position', '0 2 6');
-      cam.setAttribute( 'orbit-controls', 'enabled', true);
+      // var cam = document.querySelector('#camera');
+      // cam.setAttribute( 'orbit-controls', 'enabled', false);
+      // cam.setAttribute( 'position', '0 2 6');
+      // cam.setAttribute( 'orbit-controls', 'enabled', true);
 
 			// ORBIT CAMERA DRAG START / END EVENT LISTENERS
-			cam.addEventListener('start-drag-orbit-controls', handleDragStart);
-			cam.addEventListener('end-drag-orbit-controls', handleDragEnd);
+			// cam.addEventListener('start-drag-orbit-controls', handleDragStart);
+			// cam.addEventListener('end-drag-orbit-controls', handleDragEnd);
 
 			// TOGGLE ORBIT AND STATIC CAMERA
 			document.querySelector('#changeCamera').addEventListener('click', handleCameraChange);
 			document.querySelector('#changeTarget').addEventListener('click', handleTargetChange);
+
+      // USE MOUSE CURSOR
+      document.querySelector('#cube').addEventListener('click', handleCubeClicked);
 		}
 
 		function handleDragStart(event) {
-			console.log("drag start");
+			// console.log("drag start");
 		}
 
 		function handleDragEnd(event) {
-			console.log("drag end");
-
-			var cam1 = document.querySelector('#camera');
-			// console.log(cam1.getAttribute('position'));
-			// console.log(cam1.getAttribute('rotation'));
+			// console.log("drag end");
 		}
 
 		function handleCameraChange(event) {
@@ -113,11 +119,11 @@
 
     var targets = [
       "#target-00",
-      "#target-01",
-      "#target-02",
-      "#target-03",
-      "#target-04",
-      "#target-05",
+      "#group",
+      "#cube",
+      "#sphere",
+      "#cylinder",
+      "#plane",
     ];
 
     var currentTarget = 0;
@@ -128,6 +134,11 @@
       console.log("change target to", targets[currentTarget]);
 			cam.setAttribute('orbit-controls', 'target', targets[currentTarget]);
 		}
+
+    function handleCubeClicked(event) {
+      this.setAttribute('material', 'color', 'red');
+      console.log('I was clicked!');
+    }
 	</script>
 
 </body>
