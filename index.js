@@ -83,7 +83,7 @@ AFRAME.registerComponent('orbit-controls', {
     },
     rotateTo: {
       type: 'vec3',
-      default: '0 0 0'
+      default: [0,0,0]
     },
     rotateToSpeed: {
       type: 'number',
