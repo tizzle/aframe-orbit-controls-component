@@ -42,7 +42,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	/* global AFRAME THREE */
 
@@ -129,7 +129,7 @@
 	    },
 	    rotateTo: {
 	      type: 'vec3',
-	      default: [0,0,0]
+	      default: {x: 0, y: 0, z: 0}
 	    },
 	    rotateToSpeed: {
 	      type: 'number',
@@ -1021,5 +1021,5 @@
 	});
 
 
-/***/ }
+/***/ })
 /******/ ]);
