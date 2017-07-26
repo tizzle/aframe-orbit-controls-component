@@ -197,7 +197,7 @@ AFRAME.registerComponent('orbit-controls', {
    * Generally modifies the entity based on the data.
    */
   update: function (oldData) {
-    // console.log('component update');
+    console.log('component update');
 
     if (this.data.rotateTo) {
       var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
@@ -206,6 +206,13 @@ AFRAME.registerComponent('orbit-controls', {
         this.desiredPosition.copy(rotateToVec3);
         this.rotateTo(this.desiredPosition);
       }
+    }
+
+    var newTarget = this.sceneEl.querySelector(this.data.target).object3D.position;
+
+    if (this.target !== newTarget ) {
+      console.log(this.sceneEl.querySelector(this.data.target).object3D.position);
+      this.target = newTarget.clone();
     }
 
     this.dolly.position.copy(this.object.position);
