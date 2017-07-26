@@ -211,8 +211,9 @@ AFRAME.registerComponent('orbit-controls', {
     var newTarget = this.sceneEl.querySelector(this.data.target).object3D.position;
 
     if (this.target !== newTarget ) {
-      console.log(this.sceneEl.querySelector(this.data.target).object3D.position);
       this.target = newTarget.clone();
+      console.log(newTarget);
+      console.log(this.target);
     }
 
     this.dolly.position.copy(this.object.position);
