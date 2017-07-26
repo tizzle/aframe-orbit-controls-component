@@ -110,7 +110,7 @@ AFRAME.registerComponent('orbit-controls', {
   init: function () {
     this.sceneEl = this.el.sceneEl;
     this.object = this.el.object3D;
-    this.target = this.sceneEl.querySelector(this.data.target).object3D.position.clone();
+    this.target = this.sceneEl.querySelector(this.data.target).object3D.position;
 
     // Find the look-controls component on this camera, or create if it doesn't exist.
     this.lookControls = null;
