@@ -70,14 +70,6 @@ Install and use by directly including the [browser files](dist):
           <a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".33 1 .33" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
       </a-entity>
 
-      <a-entity
-          id = "camera2"
-          camera
-          position = "5 3 5"
-          rotation = "-25 45 0"
-          >
-      </a-entity>
-
       <a-entity id="target">
           <a-box id="box" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
           <a-sphere id="sphere" position="0 1.25 -1" radius="1.25" color="#EF2D5E"></a-sphere>
