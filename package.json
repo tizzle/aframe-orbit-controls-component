@@ -1,6 +1,10 @@
 {
   "name": "aframe-orbit-controls-component-2",
+<<<<<<< HEAD
   "version": "0.1.11",
+=======
+  "version": "0.1.10",
+>>>>>>> 78de16bd2ad134388906f1fbfe0a632b1a43dfa4
   "description": "A (almost) direct port of the ThreeJS OrbitControls as a component for A-Frame.",
   "main": "index.js",
   "scripts": {
