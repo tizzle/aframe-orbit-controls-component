@@ -16,7 +16,7 @@
         orbit-controls="
           invertZoom: true;
           autoRotate: false;
-          target: #target;
+          target: #sphere;
           enableDamping: true;
           dampingFactor: 0.125;
           rotateSpeed:0.25;
@@ -60,9 +60,9 @@
 
       // IF YOU NEED TO CHANGE ATTRIBUTES OF THE CAMERA, I RECOMMEND DISABLING BEFORE DOING IT.
       // THIS WAY THE NEW ATTRIBUTES WILL BE PASSED TO THE ORBIT-CONTROLS VIA UPDATE()
-      document.querySelector('#camera').setAttribute( 'orbit-controls', 'enabled', false);
-      document.querySelector('#camera').setAttribute( 'position', '0 2 10');
-      document.querySelector('#camera').setAttribute( 'orbit-controls', 'enabled', true);
+      // document.querySelector('#camera').setAttribute( 'orbit-controls', 'enabled', false);
+      // document.querySelector('#camera').setAttribute( 'position', '0 2 10');
+      // document.querySelector('#camera').setAttribute( 'orbit-controls', 'enabled', true);
 
 			// ORBIT CAMERA DRAG START / END EVENT LISTENERS
 			document.querySelector('#camera').addEventListener('start-drag-orbit-controls', handleDragStart);
