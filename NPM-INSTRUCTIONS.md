@@ -17,8 +17,6 @@ Make sure to push tags to remote as well.
 Publish to NPM.  
 `npm publish`
 
-Push to GitHub.
-
 ---
 
 ### Merging a PR  
