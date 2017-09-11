@@ -16,3 +16,14 @@ Make sure to push tags to remote as well.
 
 Publish to NPM.  
 `npm publish`
+
+
+---
+
+### Merging a PR
+
+Review and accept PR on GitHub.  
+
+Pull locally from remote repository.
+
+  
