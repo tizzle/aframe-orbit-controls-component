@@ -348,18 +348,21 @@ AFRAME.registerComponent('orbit-controls', {
    * Remove event listeners
    */
   removeEventListeners: function () {
-    this.canvasEl.removeEventListener('contextmenu', this.onContextMenu, false);
-    this.canvasEl.removeEventListener('mousedown', this.onMouseDown, false);
-    this.canvasEl.removeEventListener('mousewheel', this.onMouseWheel, false);
-    this.canvasEl.removeEventListener('MozMousePixelScroll', this.onMouseWheel, false); // firefox
 
-    this.canvasEl.removeEventListener('touchstart', this.onTouchStart, false);
-    this.canvasEl.removeEventListener('touchend', this.onTouchEnd, false);
-    this.canvasEl.removeEventListener('touchmove', this.onTouchMove, false);
+    if(this.canvasEl){
+        this.canvasEl.removeEventListener('contextmenu', this.onContextMenu, false);
+        this.canvasEl.removeEventListener('mousedown', this.onMouseDown, false);
+        this.canvasEl.removeEventListener('mousewheel', this.onMouseWheel, false);
+        this.canvasEl.removeEventListener('MozMousePixelScroll', this.onMouseWheel, false); // firefox
 
-    this.canvasEl.removeEventListener('mousemove', this.onMouseMove, false);
-    this.canvasEl.removeEventListener('mouseup', this.onMouseUp, false);
-    this.canvasEl.removeEventListener('mouseout', this.onMouseUp, false);
+        this.canvasEl.removeEventListener('touchstart', this.onTouchStart, false);
+        this.canvasEl.removeEventListener('touchend', this.onTouchEnd, false);
+        this.canvasEl.removeEventListener('touchmove', this.onTouchMove, false);
+
+        this.canvasEl.removeEventListener('mousemove', this.onMouseMove, false);
+        this.canvasEl.removeEventListener('mouseup', this.onMouseUp, false);
+        this.canvasEl.removeEventListener('mouseout', this.onMouseUp, false);
+    }
 
     window.removeEventListener('keydown', this.onKeyDown, false);
   },
