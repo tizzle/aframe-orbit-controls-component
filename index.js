@@ -289,7 +289,7 @@ AFRAME.registerComponent('orbit-controls', {
     this.camera = camera;
     this.cameraType = cameraType;
 
-    this.sceneEl.addEventListener('render-target-loaded', this.onRenderTargetLoaded, false);
+    this.sceneEl.addEventListener('renderstart', this.onRenderTargetLoaded, false);
 
     if (this.lookControls) this.lookControls.pause();
     if (this.canvasEl) this.addEventListeners();
@@ -300,7 +300,7 @@ AFRAME.registerComponent('orbit-controls', {
    * Then set canvasEl and add event listeners
    */
   onRenderTargetLoaded: function () {
-    this.sceneEl.removeEventListener('render-target-loaded', this.onRenderTargetLoaded, false);
+    this.sceneEl.removeEventListener('renderstart', this.onRenderTargetLoaded, false);
     this.canvasEl = this.sceneEl.canvas;
     this.addEventListeners();
   },
