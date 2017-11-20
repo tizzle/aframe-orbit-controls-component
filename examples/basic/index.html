@@ -11,25 +11,31 @@
 
 			<a-entity
         id="camera"
-        camera="fov: 80; zoom: 1;"
+        camera="
+					active: true;
+					fov: 80;
+					zoom: 1;
+				"
         position="0 2 5"
         orbit-controls="
-          invertZoom: true;
-          autoRotate: false;
-          target: #sphere;
+          target: #target;
           enableDamping: true;
           dampingFactor: 0.125;
-          rotateSpeed:0.25;
-          minDistance:3;
-          maxDistance:100;
+          rotateSpeed: 0.25;
+          minDistance: 3;
+          maxDistance: 100;
         "
         mouse-cursor=""
       >
 				<a-entity geometry="primitive:cone; radius-bottom:1; radius-top:0" scale=".33 1 .33" position="0 0 0" rotation="90 0 0" material="color: #0099ff; transparent: true; opacity:0.5"></a-entity>
 			</a-entity>
 
-			<a-entity id="camera2" camera position="5 3 5" rotation="-25 45 0">
-			</a-entity>
+			<a-entity
+				id="camera2"
+				camera="active: false;"
+				position="5 3 5"
+				rotation="-25 45 0"
+			></a-entity>
 
 			<a-entity id="target">
 				<a-box id="box" position="-1 0.5 1" rotation="0 45 0" color="#4CC3D9"></a-box>
@@ -85,11 +91,21 @@
 		}
 
 		function handleSwitchCamera(event) {
+			console.log('switch camera');
 			var cam1 = document.querySelector('#camera');
 			var cam2 = document.querySelector('#camera2');
 
-			if (cam1.components.camera.data.active) cam2.setAttribute('camera', 'active', true);
-			else cam1.setAttribute('camera', 'active', true);
+			if (cam1.components.camera.data.active) {
+				cam1.setAttribute('orbit-controls', 'enabled', false);
+				cam1.setAttribute('camera', 'active', false);
+				cam2.setAttribute('camera', 'active', true);
+			}
+			else {
+				cam2.setAttribute('camera', 'active', false);
+				cam1.setAttribute('orbit-controls', 'enabled', true);
+				cam1.setAttribute('camera', 'active', true);
+				console.log(cam1.getAttribute('look-controls'));
+			}
 		}
 	</script>
 

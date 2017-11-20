@@ -13,77 +13,104 @@ AFRAME.registerComponent('orbit-controls', {
   dependencies: ['position', 'rotation'],
   schema: {
     enabled: {
+      type: 'bool',
       default: true
     },
     target: {
+      type: 'string',
       default: ''
     },
     distance: {
+      type: 'number',
       default: 1
     },
     enableRotate: {
+      type: 'bool',
       default: true
     },
     rotateSpeed: {
+      type: 'number',
       default: 1.0
     },
     enableZoom: {
+      type: 'bool',
       default: true
     },
     zoomSpeed: {
+      type: 'number',
       default: 1.0
     },
     enablePan: {
+      type: 'bool',
       default: true
     },
     keyPanSpeed: {
+      type: 'number',
       default: 7.0
     },
     enableDamping: {
+      type: 'bool',
       default: false
     },
     dampingFactor: {
+      type: 'number',
       default: 0.25
     },
     autoRotate: {
+      type: 'bool',
       default: false
     },
     autoRotateSpeed: {
+      type: 'number',
       default: 2.0
     },
     enableKeys: {
+      type: 'bool',
       default: true
     },
     minAzimuthAngle: {
+      type: 'number',
       default: -Infinity
     },
     maxAzimuthAngle: {
+      type: 'number',
       default: Infinity
     },
     minPolarAngle: {
+      type: 'number',
       default: 0
     },
     maxPolarAngle: {
+      type: 'number',
       default: Math.PI
     },
     minZoom: {
+      type: 'number',
       default: 0
     },
     maxZoom: {
+      type: 'number',
       default: Infinity
     },
     invertZoom: {
+      type: 'bool',
       default: false
     },
     minDistance: {
+      type: 'number',
       default: 0
     },
     maxDistance: {
+      type: 'number',
       default: Infinity
+    },
+    enableRotateTo: {
+      type: 'bool',
+      default: false
     },
     rotateTo: {
       type: 'vec3',
-      default: {x: 0, y: 0, z: 0}
+      default: {x:0, y:0, z:0}
     },
     rotateToSpeed: {
       type: 'number',
@@ -96,7 +123,7 @@ AFRAME.registerComponent('orbit-controls', {
     autoVRLookCam: {
       type: 'boolean',
       default: true
-    }
+    },
   },
 
   /**
@@ -105,18 +132,29 @@ AFRAME.registerComponent('orbit-controls', {
   multiple: false,
 
   /**
+   * Public functions
+   */
+
+  setRotateTo : function(position) {
+    parsedPosition = AFRAME.schema.parseProperty(position, this.schema['rotateTo']);
+    this.state = this.STATE.ROTATE_TO;
+    this.desiredPosition.copy(parsedPosition);
+  },
+
+  /**
    * Called once when component is attached. Generally for initial setup.
    */
   init: function () {
+    // console.log('init orbit-controls', this);
+
     this.sceneEl = this.el.sceneEl;
     this.object = this.el.object3D;
     this.target = this.sceneEl.querySelector(this.data.target).object3D.position;
 
-    console.log('enabled: ', this.data.enabled);
-
     // Find the look-controls component on this camera, or create if it doesn't exist.
     this.isRunning = false;
     this.lookControls = null;
+    this.vrMode = false;
 
     if (this.data.autoVRLookCam) {
       if (this.el.components['look-controls']) {
@@ -195,14 +233,15 @@ AFRAME.registerComponent('orbit-controls', {
    * Generally modifies the entity based on the data.
    */
   update: function (oldData) {
-    console.log('component update');
+    // console.log('component update');
 
-    if (this.data.rotateTo) {
-      var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
-      // Check if rotateToVec3 is already desiredPosition
-      if (!this.desiredPosition.equals(rotateToVec3)) {
-        this.desiredPosition.copy(rotateToVec3);
+    if (this.data.enableRotateTo) {
+      this.desiredPosition.copy(this.data.rotateTo);
+      if (!this.dolly.position.equals(this.desiredPosition)) {
+        console.log('dolly is not at desired position');
         this.rotateTo(this.desiredPosition);
+      } else {
+        console.log('dolly is at desired position');
       }
     }
 
@@ -238,12 +277,14 @@ AFRAME.registerComponent('orbit-controls', {
   onEnterVR: function (event) {
     // console.log('enter vr', this);
 
+    this.vrMode = true;
     this.saveCameraPose();
 
     this.el.setAttribute('position', {x: 0, y: 2, z: 5});
     this.el.setAttribute('rotation', {x: 0, y: 0, z: 0});
 
     this.pause();
+    this.lookControls.data.enabled = true;
     this.lookControls.play();
     if (this.data.autoRotate) console.warn('orbit-controls: Sorry, autoRotate is not implemented in VR mode');
   },
@@ -254,6 +295,9 @@ AFRAME.registerComponent('orbit-controls', {
   onExitVR: function (event) {
     // console.log('exit vr');
 
+    this.vrMode = false;
+
+    this.lookControls.data.enabled = false;
     this.lookControls.pause();
     this.play();
 
@@ -295,8 +339,12 @@ AFRAME.registerComponent('orbit-controls', {
 
     this.sceneEl.addEventListener('renderstart', this.onRenderTargetLoaded, false);
 
-    if (this.lookControls) this.lookControls.pause();
     if (this.canvasEl) this.addEventListeners();
+
+    if (this.lookControls) {
+      this.lookControls.data.enabled = false;
+      this.lookControls.pause();
+    }
   },
 
   /*
@@ -414,6 +462,12 @@ AFRAME.registerComponent('orbit-controls', {
 
       this.el.emit('start-drag-orbit-controls', null, false);
     }
+
+    // invalidate rotateTo
+    if (this.data.enableRotateTo) {
+      this.oldData.rotateTo = undefined;
+      this.attrValue.rotateTo = undefined;
+    }
   },
 
   onMouseMove: function (event) {
@@ -456,6 +510,7 @@ AFRAME.registerComponent('orbit-controls', {
     this.el.emit('end-drag-orbit-controls', null, false);
   },
 
+
   /*
    * MOUSE WHEEL EVENT LISTENERS
    */
@@ -469,6 +524,7 @@ AFRAME.registerComponent('orbit-controls', {
     event.stopPropagation();
     this.handleMouseWheel(event);
   },
+
 
   /*
    * TOUCH EVENT LISTENERS
@@ -501,6 +557,12 @@ AFRAME.registerComponent('orbit-controls', {
 
     if (this.state !== this.STATE.NONE) {
       this.el.emit('start-drag-orbit-controls', null, false);
+    }
+
+    // invalidate rotateTo
+    if (this.data.enableRotateTo) {
+      this.oldData.rotateTo = undefined;
+      this.attrValue.rotateTo = undefined;
     }
   },
 
@@ -979,5 +1041,4 @@ AFRAME.registerComponent('orbit-controls', {
       return hmdQuaternion;
     };
   })()
-
 });

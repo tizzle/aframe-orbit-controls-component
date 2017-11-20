@@ -6,20 +6,27 @@
 </head>
 
 <body>
-    <button class="position-selector" data-position="0.17 4.14 2.79">Position 1</button>
-    <button class="position-selector" data-position="3.48 3.57 0.15">Position 2</button>
-    <button class="position-selector" data-position="-2.89 -2.51 3.20">Position 3</button>
+    <div style="position:absolute; top:0; left:0; padding:12px; z-index:1;">
+      <button class="position-selector" data-position="0.17 4.14 2.79">Position 1</button>
+      <button class="position-selector" data-position="3.48 3.57 0.15">Position 2</button>
+      <button class="position-selector" data-position="-2.89 -2.51 3.20">Position 3</button>
+    </div>
 
     <a-scene embedded>
 
-        <a-entity id="camera" camera position="0 0 5" orbit-controls="
+        <a-entity
+          id="camera"
+          camera
+          position="0 0 5"
+          orbit-controls="
             target: #target;
             enableDamping: true;
             dampingFactor: 0.125;
             rotateSpeed:0.25;
-            rotateToSpeed: 0.04;
+            enableRotateTo: true;
             rotateTo: 0.172 4.140 2.797;
-            logPosition: true;
+            rotateToSpeed: 0.04;
+            logPosition: false;
             ">
         </a-entity>
 
@@ -36,12 +43,14 @@
         var buttons = document.querySelectorAll('.position-selector')
 
         buttons.forEach(function(button) {
-            button.addEventListener('click', rotateTo)
+            button.addEventListener('click', rotateTo);
         })
 
         function rotateTo(e) {
-            var position = e.target.dataset.position
-            document.querySelector('#camera').setAttribute('orbit-controls', 'rotateTo', position)
+          var position = e.target.dataset.position;
+          var camera = document.querySelector('#camera');
+          camera.components['orbit-controls'].setRotateTo(position);
+          // camera.setAttribute('orbit-controls', 'rotateTo', position);
         }
     </script>
 </body>
