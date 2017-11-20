@@ -112,7 +112,10 @@ AFRAME.registerComponent('orbit-controls', {
     this.object = this.el.object3D;
     this.target = this.sceneEl.querySelector(this.data.target).object3D.position;
 
+    console.log('enabled: ', this.data.enabled);
+
     // Find the look-controls component on this camera, or create if it doesn't exist.
+    this.isRunning = false;
     this.lookControls = null;
 
     if (this.data.autoVRLookCam) {
@@ -213,6 +216,7 @@ AFRAME.registerComponent('orbit-controls', {
    */
   remove: function () {
     // console.log("component remove");
+    this.isRunning = false;
     this.removeEventListeners();
     this.el.sceneEl.removeEventListener('enter-vr', this.onEnterVR, false);
     this.el.sceneEl.removeEventListener('exit-vr', this.onExitVR, false);
@@ -222,7 +226,7 @@ AFRAME.registerComponent('orbit-controls', {
    * Called on each scene tick.
    */
   tick: function (t) {
-    var render = this.data.enabled ? this.updateView() : false;
+    var render = this.data.enabled && this.isRunning ? this.updateView() : false;
     if (render === true && this.data.logPosition === true) {
       console.log(this.el.object3D.position);
     }
@@ -263,7 +267,7 @@ AFRAME.registerComponent('orbit-controls', {
    */
   pause: function () {
     // console.log("component pause");
-    this.data.enabled = false;
+    this.isRunning  = false;
     this.removeEventListeners();
   },
 
@@ -273,7 +277,7 @@ AFRAME.registerComponent('orbit-controls', {
    */
   play: function () {
     // console.log("component play");
-    this.data.enabled = true;
+    this.isRunning = true;
 
     var camera, cameraType;
     this.object.traverse(function (child) {
@@ -381,7 +385,7 @@ AFRAME.registerComponent('orbit-controls', {
   onMouseDown: function (event) {
     // console.log('onMouseDown');
 
-    if (this.data.enabled === false) return;
+    if (!this.data.enabled || !this.isRunning) return;
 
     if (event.button === this.mouseButtons.ORBIT && (event.shiftKey || event.ctrlKey)) {
       if (this.data.enablePan === false) return;
@@ -415,7 +419,7 @@ AFRAME.registerComponent('orbit-controls', {
   onMouseMove: function (event) {
     // console.log('onMouseMove');
 
-    if (this.data.enabled === false) return;
+    if (!this.data.enabled || !this.isRunning) return;
 
     event.preventDefault();
 
@@ -434,7 +438,7 @@ AFRAME.registerComponent('orbit-controls', {
   onMouseUp: function (event) {
     // console.log('onMouseUp');
 
-    if (this.data.enabled === false) return;
+    if (!this.data.enabled || !this.isRunning) return;
 
     if (this.state === this.STATE.ROTATE_TO) return;
 
@@ -459,7 +463,8 @@ AFRAME.registerComponent('orbit-controls', {
   onMouseWheel: function (event) {
     // console.log('onMouseWheel');
 
-    if (this.data.enabled === false || this.data.enableZoom === false || (this.state !== this.STATE.NONE && this.state !== this.STATE.ROTATE)) return;
+    if (!this.data.enabled || !this.isRunning || this.data.enableZoom === false || (this.state !== this.STATE.NONE && this.state !== this.STATE.ROTATE)) return;
+
     event.preventDefault();
     event.stopPropagation();
     this.handleMouseWheel(event);
@@ -472,7 +477,7 @@ AFRAME.registerComponent('orbit-controls', {
   onTouchStart: function (event) {
     // console.log('onTouchStart');
 
-    if (this.data.enabled === false) return;
+    if (!this.data.enabled || !this.isRunning) return;
 
     switch (event.touches.length) {
       case 1: // one-fingered touch: rotate
@@ -502,7 +507,7 @@ AFRAME.registerComponent('orbit-controls', {
   onTouchMove: function (event) {
     // console.log('onTouchMove');
 
-    if (this.data.enabled === false) return;
+    if (!this.data.enabled || !this.isRunning) return;
 
     event.preventDefault();
     event.stopPropagation();
@@ -534,7 +539,7 @@ AFRAME.registerComponent('orbit-controls', {
   onTouchEnd: function (event) {
     // console.log('onTouchEnd');
 
-    if (this.data.enabled === false) return;
+    if (!this.data.enabled || !this.isRunning) return;
 
     this.handleTouchEnd(event);
 
@@ -550,7 +555,7 @@ AFRAME.registerComponent('orbit-controls', {
   onKeyDown: function (event) {
     // console.log('onKeyDown');
 
-    if (this.data.enabled === false || this.data.enableKeys === false || this.data.enablePan === false) return;
+    if (!this.data.enabled || !this.isRunning || this.data.enableKeys === false || this.data.enablePan === false) return;
 
     this.handleKeyDown(event);
   },
