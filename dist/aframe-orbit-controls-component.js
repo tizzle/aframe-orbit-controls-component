@@ -286,7 +286,7 @@
 
 	    this.saveCameraPose();
 
-	    this.el.setAttribute('position', {x: 0, y: 2, z: 5});
+	    // this.el.setAttribute('position', {x: 0, y: 2, z: 5});
 	    this.el.setAttribute('rotation', {x: 0, y: 0, z: 0});
 
 	    this.pause();
