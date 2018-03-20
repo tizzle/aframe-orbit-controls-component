@@ -55,7 +55,7 @@
 	/**
 	 * Example component for A-Frame.
 	 */
-	AFRAME.registerComponent('scapic-orbit-controls', {
+	AFRAME.registerComponent('orbit-controls', {
 	  dependencies: ['position', 'rotation'],
 	  schema: {
 	    enabled: {
@@ -158,7 +158,7 @@
 	    this.object = this.el.object3D;
 	    this.target = this.sceneEl.querySelector(this.data.target).object3D.position;
 
-	    console.log('enabled: ', this.data.enabled);
+	    // console.log('enabled: ', this.data.enabled);
 	    this.endFlag = false;
 	    this.startFlag = false;
 
@@ -243,7 +243,7 @@
 	   * Generally modifies the entity based on the data.
 	   */
 	  update: function (oldData) {
-	    console.log('component update');
+	    // console.log('component update');
 
 	    if (this.data.rotateTo) {
 	      var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
