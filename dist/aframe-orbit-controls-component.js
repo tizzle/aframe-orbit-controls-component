@@ -158,7 +158,9 @@
 	    this.object = this.el.object3D;
 	    this.target = this.sceneEl.querySelector(this.data.target).object3D.position;
 
-	    console.log('enabled: ', this.data.enabled);
+	    // console.log('enabled: ', this.data.enabled);
+	    this.endFlag = false;
+	    this.startFlag = false;
 
 	    // Find the look-controls component on this camera, or create if it doesn't exist.
 	    this.isRunning = false;
@@ -241,7 +243,7 @@
 	   * Generally modifies the entity based on the data.
 	   */
 	  update: function (oldData) {
-	    console.log('component update');
+	    // console.log('component update');
 
 	    if (this.data.rotateTo) {
 	      var rotateToVec3 = new THREE.Vector3(this.data.rotateTo.x, this.data.rotateTo.y, this.data.rotateTo.z);
@@ -286,7 +288,7 @@
 
 	    this.saveCameraPose();
 
-	    this.el.setAttribute('position', {x: 0, y: 2, z: 5});
+	    // this.el.setAttribute('position', {x: 0, y: 2, z: 5});
 	    this.el.setAttribute('rotation', {x: 0, y: 0, z: 0});
 
 	    this.pause();
@@ -313,7 +315,7 @@
 	   */
 	  pause: function () {
 	    // console.log("component pause");
-	    this.isRunning  = false;
+	    this.isRunning = false;
 	    this.removeEventListeners();
 	  },
 
@@ -393,20 +395,19 @@
 	   * Remove event listeners
 	   */
 	  removeEventListeners: function () {
+	    if (this.canvasEl) {
+	      this.canvasEl.removeEventListener('contextmenu', this.onContextMenu, false);
+	      this.canvasEl.removeEventListener('mousedown', this.onMouseDown, false);
+	      this.canvasEl.removeEventListener('mousewheel', this.onMouseWheel, false);
+	      this.canvasEl.removeEventListener('MozMousePixelScroll', this.onMouseWheel, false); // firefox
 
-	    if(this.canvasEl){
-	        this.canvasEl.removeEventListener('contextmenu', this.onContextMenu, false);
-	        this.canvasEl.removeEventListener('mousedown', this.onMouseDown, false);
-	        this.canvasEl.removeEventListener('mousewheel', this.onMouseWheel, false);
-	        this.canvasEl.removeEventListener('MozMousePixelScroll', this.onMouseWheel, false); // firefox
+	      this.canvasEl.removeEventListener('touchstart', this.onTouchStart, false);
+	      this.canvasEl.removeEventListener('touchend', this.onTouchEnd, false);
+	      this.canvasEl.removeEventListener('touchmove', this.onTouchMove, false);
 
-	        this.canvasEl.removeEventListener('touchstart', this.onTouchStart, false);
-	        this.canvasEl.removeEventListener('touchend', this.onTouchEnd, false);
-	        this.canvasEl.removeEventListener('touchmove', this.onTouchMove, false);
-
-	        this.canvasEl.removeEventListener('mousemove', this.onMouseMove, false);
-	        this.canvasEl.removeEventListener('mouseup', this.onMouseUp, false);
-	        this.canvasEl.removeEventListener('mouseout', this.onMouseUp, false);
+	      this.canvasEl.removeEventListener('mousemove', this.onMouseMove, false);
+	      this.canvasEl.removeEventListener('mouseup', this.onMouseUp, false);
+	      this.canvasEl.removeEventListener('mouseout', this.onMouseUp, false);
 	    }
 
 	    window.removeEventListener('keydown', this.onKeyDown, false);
@@ -499,7 +500,7 @@
 
 	    this.state = this.STATE.NONE;
 
-	    this.el.emit('end-drag-orbit-controls', null, false);
+	    this.startFlag = true;
 	  },
 
 	  /*
@@ -940,7 +941,7 @@
 	      var thetaDiff = desiredSpherical.theta - this.spherical.theta;
 	      this.sphericalDelta.set(this.spherical.radius, phiDiff * this.data.rotateToSpeed, thetaDiff * this.data.rotateToSpeed);
 	    }
-
+	    //  console.log("updating");
 	    var offset = new THREE.Vector3();
 
 	    var quat = new THREE.Quaternion().setFromUnitVectors(this.dolly.up, new THREE.Vector3(0, 1, 0)); // so camera.up is the orbit axis
@@ -974,6 +975,7 @@
 	    if (this.data.enableDamping === true) {
 	      this.sphericalDelta.theta *= (1 - this.data.dampingFactor);
 	      this.sphericalDelta.phi *= (1 - this.data.dampingFactor);
+	      //   console.log(this.sphericalDelta);
 	    } else {
 	      this.sphericalDelta.set(0, 0, 0);
 	    }
@@ -985,12 +987,14 @@
 	    // min(camera displacement, camera rotation in radians)^2 > EPS
 	    // using small-angle approximation cos(x/2) = 1 - x^2 / 8
 
+	    this.endFlag = true;
+
 	    if (forceUpdate === true ||
 	      this.zoomChanged ||
 	      this.lastPosition.distanceToSquared(this.dolly.position) > this.EPS ||
 	      8 * (1 - this.lastQuaternion.dot(this.dolly.quaternion)) > this.EPS) {
 	      // this.el.emit('change-drag-orbit-controls', null, false);
-
+	      //   console.log("updating");
 	      var hmdQuaternion = this.calculateHMDQuaternion();
 	      var hmdEuler = new THREE.Euler();
 	      hmdEuler.setFromQuaternion(hmdQuaternion, 'YXZ');
@@ -1007,12 +1011,19 @@
 	        z: radToDeg(hmdEuler.z)
 	      });
 
+	      this.endFlag = false;
+
 	      this.lastPosition.copy(this.dolly.position);
 	      this.lastQuaternion.copy(this.dolly.quaternion);
 
 	      this.zoomChanged = false;
 
 	      return true;
+	    }
+
+	    if (this.startFlag && this.endFlag) {
+	      this.startFlag = false;
+	      this.el.emit('end-drag-orbit-controls', null, false);
 	    }
 
 	    return false;
