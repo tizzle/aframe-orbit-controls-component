@@ -1,5 +1,10 @@
 ## aframe-orbit-controls-component
 
+***
+Please use this more preformant component instead: https://github.com/ngokevin/kframe/tree/master/components/orbit-controls
+***
+
+
 A (almost) direct port of the ThreeJS Orbit Controls for [A-Frame](https://aframe.io).
 It allows users to rotate the camera around an object. Might be useful as a fallback to VR mode. Automatically switches to look-controls in VR mode.
 
