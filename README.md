@@ -1,7 +1,7 @@
 ## aframe-orbit-controls-component
 
 ***
-Please use this more preformant component instead: https://github.com/ngokevin/kframe/tree/master/components/orbit-controls
+Please use this more performant component instead: https://github.com/ngokevin/kframe/tree/master/components/orbit-controls
 ***
 
 
