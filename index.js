@@ -148,6 +148,10 @@ AFRAME.registerComponent('orbit-controls', {
       ROTATE_TO: 6
     };
 
+    this.camData = {
+      zoomFactor: 10
+    }
+
     this.state = this.STATE.NONE;
 
     this.EPS = 0.000001;
@@ -914,6 +918,11 @@ AFRAME.registerComponent('orbit-controls', {
     this.spherical.makeSafe();
     this.spherical.radius *= this.scale;
     this.spherical.radius = Math.max(this.data.minDistance, Math.min(this.data.maxDistance, this.spherical.radius)); // restrict radius to be inside desired limits
+    
+    if (this.camera) {
+      this.camData.zoomFactor = this.spherical.radius;
+      this.camera.userData = this.camData;
+    }
 
     this.target.add(this.panOffset); // move target to panned location
 
